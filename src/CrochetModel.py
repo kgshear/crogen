@@ -1,7 +1,7 @@
 import CrochetStitch
 import PatternObserver
 
-class PatternBuilder:
+class CrochetModel:
     # use method to add
     row_length: int = 0
 

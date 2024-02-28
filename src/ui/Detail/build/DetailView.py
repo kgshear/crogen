@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-from tkinter import Canvas, Button, PhotoImage
+from tkinter import Canvas, Button, PhotoImage, Tk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -129,3 +129,5 @@ def DetailView(parent):
         outline="")
     parent.resizable(False, False)
     parent.mainloop()
+
+DetailView(Tk())

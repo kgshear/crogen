@@ -116,3 +116,5 @@ def PatternView(parent):
         outline="")
     parent.resizable(False, False)
     parent.mainloop()
+
+PatternView(Tk())

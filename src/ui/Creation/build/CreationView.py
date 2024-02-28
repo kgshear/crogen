@@ -361,3 +361,5 @@ def CreationView(parent):
         outline="")
     parent.resizable(False, False)
     parent.mainloop()
+
+CreationView(Tk())
