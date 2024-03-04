@@ -3,10 +3,12 @@ import PatternObserver
 
 class CrochetModel:
     # use method to add
-    row_length: int = 0
 
     def __init__(self):
-       self.observers = []
+        self.row_length = 0
+        self.observers = []
+        self.cur_row = CrochetStitch.Row()
+        self.rows = []
 
     def addRow(self):
         pass
