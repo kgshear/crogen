@@ -14,7 +14,8 @@ class CrochetModel:
         pass
 
     def addStitch(self, type: CrochetStitch):
-        pass
+        self.cur_row.add_stitch(type)
+        self.notifyObservers()
 
     def build(self):
         # check to see if there are any stitches or rows

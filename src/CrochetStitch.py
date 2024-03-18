@@ -1,19 +1,46 @@
+import bpy
+import os
 class CrochetStitch:
     # different 3D design per stitch
     def __init__(self):
+        self.object_name = "NurbsCurve"
         pass
 
     def to_string(self):
         # this will be how we transcribe pattern in a written format
         pass
+    def get_file_path(self):
+        pass
+
+    def get_model(self):
+        file_path = self.get_file_path()
+        with bpy.data.libraries.load(file_path) as (data_from, data_to):
+            data_to.objects = [name for name in data_from.objects if name == self.object_name]
+
+        for obj in data_to.objects:
+            bpy.context.collection.objects.link(obj)
+
+        imported_object = bpy.context.scene.objects[self.object_name]
+        return imported_object
 
 class SingleCrochet(CrochetStitch):
     def __init__(self):
         super().__init__()
 
+
+    def get_file_path(self):
+        file_path = os.getcwd() + "/assets/single-crochet.blend"
+        return file_path
+
+
+
 class Chain(CrochetStitch):
     def __init__(self):
         super().__init__()
+
+    def get_file_path(self):
+        file_path = "/assets/chain-stitch.blend"
+        return file_path
 
 class Slip(CrochetStitch):
     def __init__(self):
