@@ -20,23 +20,26 @@ class CrochetStitch:
         for obj in data_to.objects:
             bpy.context.collection.objects.link(obj)
 
-        imported_object = bpy.context.scene.objects[self.object_name]
+        imported_object = next(obj for obj in bpy.context.scene.objects if obj.name.startswith(self.object_name))
         return imported_object
+
+    def get_object_name(self):
+        return self.object_name
 
 class SingleCrochet(CrochetStitch):
     def __init__(self):
         super().__init__()
+        self.object_name = "SingleCrochet"
 
 
     def get_file_path(self):
         file_path = os.getcwd() + "/assets/single-crochet.blend"
         return file_path
 
-
-
 class Chain(CrochetStitch):
     def __init__(self):
         super().__init__()
+        self.object_name = "ChainStitch"
 
     def get_file_path(self):
         file_path = "/assets/chain-stitch.blend"
@@ -56,13 +59,9 @@ class HalfDouble(CrochetStitch):
 
 
 class Row():
-    stitch_array = None
-    array_size = None
-    max_size = None
-    remainder = None
 
-    def __init__(self, stitch_array=None, array_size=0, max_size = float('inf')):
-        self.stitch_array = stitch_array
+    def __init__(self, array_size=0, max_size = float('inf')):
+        self.stitch_array = []
         self.array_size = array_size
         self.max_size = max_size
         self.remainder = []
@@ -94,12 +93,42 @@ class Row():
             self.stitch_array.append(stitch)
             self.array_size += 1
 
-    def add_n_stitches(self, amount, stitch):
-        for n in range(amount):
-            self.add_stitch(stitch)
+    # def add_n_stitches(self, amount, stitch):
+    #     for n in range(amount):
+    #         self.add_stitch(stitch)
 
     def to_string(self):
         pass
+
+    def get_tuples(self):
+        # returns tuples with (stitch-type, amount)
+        # ex: if stitch_array is [SC, SC, C, SC], tuples are [(SC, 2), (C, 1), (SC, 1)]
+        result = []
+        count = 0
+        last_stitch = None
+        for stitch in self.stitch_array:
+            if type(stitch) != type(last_stitch):
+                if last_stitch is not None:
+                    result.append((last_stitch, count))
+                last_stitch = stitch
+                count = 1
+            else:
+                count += 1
+        if last_stitch is not None:
+            result.append((last_stitch, count))
+        return result
+
+
+if __name__ == "__main__":
+    row = Row()
+    row.add_stitch(SingleCrochet())
+    row.add_stitch(Chain())
+    row.add_stitch(SingleCrochet())
+    row.add_stitch(SingleCrochet())
+    print(row.get_tuples())
+
+
+
 
 
 
