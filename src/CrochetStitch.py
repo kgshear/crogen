@@ -4,6 +4,7 @@ class CrochetStitch:
     # different 3D design per stitch
     def __init__(self):
         self.object_name = "NurbsCurve"
+        self.import_name = "NurbsCurve"
         pass
 
     def to_string(self):
@@ -20,42 +21,82 @@ class CrochetStitch:
         for obj in data_to.objects:
             bpy.context.collection.objects.link(obj)
 
-        imported_object = next(obj for obj in bpy.context.scene.objects if obj.name.startswith(self.object_name))
+        print("import_name", self.import_name)
+
+        imported_object = next(obj for obj in bpy.context.scene.objects if obj.name.startswith(self.import_name))
         return imported_object
 
     def get_object_name(self):
         return self.object_name
 
 class SingleCrochet(CrochetStitch):
+    count = -1
     def __init__(self):
         super().__init__()
+        SingleCrochet.count += 1
         self.object_name = "SingleCrochet"
+        self.import_name = "SingleCrochet" + self.calc_import_name()
 
 
     def get_file_path(self):
         file_path = os.getcwd() + "/assets/single-crochet.blend"
         return file_path
 
+    def calc_import_name(self):
+        import_num = ""
+        str_count = str(SingleCrochet.count)
+        if (SingleCrochet.count != 0):
+            if len(str_count) == 1:
+                import_num = ".00" + str_count
+            elif len(str_count) == 2:
+                import_num = ".0" + str_count
+            else:
+                import_num = "." + str_count
+
+        return import_num
+
 class Chain(CrochetStitch):
+    count = -1
     def __init__(self):
         super().__init__()
+        Chain.count += 1
         self.object_name = "ChainStitch"
+        self.import_name = "ChainStitch" + self.calc_import_name()
 
     def get_file_path(self):
         file_path = os.getcwd() + "/assets/chain-stitch.blend"
         return file_path
 
+    def calc_import_name(self):
+        import_num = ""
+        str_count = str(Chain.count)
+        if (Chain.count != 0):
+            if len(str_count) == 1:
+                import_num = ".00" + str_count
+            elif len(str_count) == 2:
+                import_num = ".0" + str_count
+            else:
+                import_num = "." + str_count
+
+        return import_num
+
 class Slip(CrochetStitch):
+    count = -1
     def __init__(self):
         super().__init__()
+        Slip.count += 1
 
 class DoubleCrochet(CrochetStitch):
+    count = -1
     def __init__(self):
         super().__init__()
+        DoubleCrochet.count += 1
 
 class HalfDouble(CrochetStitch):
+    count = -1
     def __init__(self):
         super().__init__()
+        HalfDouble.count += 1
 
 
 class Row():
