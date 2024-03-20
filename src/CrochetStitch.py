@@ -42,7 +42,7 @@ class Chain(CrochetStitch):
         self.object_name = "ChainStitch"
 
     def get_file_path(self):
-        file_path = "/assets/chain-stitch.blend"
+        file_path = os.getcwd() + "/assets/chain-stitch.blend"
         return file_path
 
 class Slip(CrochetStitch):
