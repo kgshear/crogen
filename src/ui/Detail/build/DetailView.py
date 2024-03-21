@@ -9,7 +9,7 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class CreationView(Frame):
+class DetailView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(bg = "#FFFFFF")
@@ -63,14 +63,14 @@ class CreationView(Frame):
     
         button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
-        button_1 = Button(
+        self.NextButton = Button(
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_1 clicked"),
             relief="flat"
         )
-        button_1.place(
+        self.NextButton.place(
             x=1070.0,
             y=679.0,
             width=296.0,

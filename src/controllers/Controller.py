@@ -1,7 +1,7 @@
-import DetailController
-import CreationController
-import PatternController
-from src.CrochetModel import CrochetModel
+from DetailController import DetailController
+from CreationController import CreationController
+from PatternController import PatternController
+from src.models.CrochetModel import CrochetModel
 from src.ui.View import View
 
 class Controller:
@@ -11,4 +11,7 @@ class Controller:
         self.detail_controller = DetailController(model, view)
         self.creation_controller = CreationController(model, view)
         self.pattern_controller = PatternController(model, view)
+
+    def start(self):
+        self.view.start_mainloop()
 

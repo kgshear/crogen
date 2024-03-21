@@ -40,14 +40,14 @@ class PatternView(Frame):
 
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
-        self.button_1 = Button(
+        self.BackButton = Button(
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_1 clicked"),
             relief="flat"
         )
-        self.button_1.place(
+        self.BackButton.place(
             x=43.0,
             y=694.0,
             width=296.0,

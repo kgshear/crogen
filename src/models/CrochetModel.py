@@ -1,7 +1,7 @@
 import CrochetStitch
-import PatternObserver
 import bpy
 import os
+
 
 class CrochetModel:
     # use method to add
@@ -14,20 +14,12 @@ class CrochetModel:
         self.model_dict = {}
         self.init_stitches()
 
-
     def init_stitches(self):
         bpy.ops.wm.read_factory_settings(use_empty=True)
-        # sc = CrochetStitch.SingleCrochet()
-        # ch = CrochetStitch.Chain()
-        # self.model_dict[sc.get_object_name()] = sc.get_model()
-        # self.model_dict[ch.get_object_name()] = ch.get_model()
-
-
 
     def addToRow(self, type: CrochetStitch, amount):
         for n in range(0, amount):
             self.cur_row.add_stitch(type)
-
 
     def newRow(self):
         self.cur_row = CrochetStitch.Row()
@@ -35,7 +27,7 @@ class CrochetModel:
 
     def addStitch(self, type: CrochetStitch):
         self.cur_row.add_stitch(type)
-        self.notifyObservers()
+        # self.notifyObservers()
 
     def build(self):
         output_blend_file_path = os.getcwd() + "/assets/new_pattern.blend"
@@ -71,17 +63,17 @@ class CrochetModel:
     def undo(self):
         pass
 
-    def addObserver(self, observer: PatternObserver):
-        self.observers.append(observer)
+    # def addObserver(self, observer: PatternObserver):
+    #     self.observers.append(observer)
+    #
+    # def removeObserver(self, observer: PatternObserver):
+    #     self.observers.remove(observer)
 
-    def removeObserver(self, observer: PatternObserver):
-        self.observers.remove(observer)
+    # def notifyObservers(self):
+    #     for observer in self.observers:
+    #         observer.update(self)
 
-    def notifyObservers(self):
-        for observer in self.observers:
-            observer.update(self)
-
-        # self.build()
+    # self.build()
 
 
 if __name__ == "__main__":
@@ -94,4 +86,3 @@ if __name__ == "__main__":
     model.newRow()
     model.addToRow(CrochetStitch.SingleCrochet(), 20)
     model.build()
-

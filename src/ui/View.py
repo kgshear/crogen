@@ -1,16 +1,17 @@
 
-from src.ui.Detail.build import DetailView
-from src.ui.Creation.build import CreationView
-from src.ui.Pattern.build import PatternView
-from src import Crogen
+from src.ui.Detail.build.DetailView import DetailView
+from src.ui.Creation.build.CreationView import CreationView
+from src.ui.Pattern.build.PatternView import PatternView
+from src.ui import Crogen
+
 
 class View:
     def __init__(self):
         self.root = None  # Initialize root as None
-        self.frame_classes = {
-            "detail": DetailView,
-            "creation": CreationView,
-            "pattern": PatternView,
+        self.frame_classes = { #TODO fix???
+            "detail": DetailView(),
+            "creation": CreationView(),
+            "pattern": PatternView(),
         }
         self.current_frame = None
 
@@ -27,6 +28,7 @@ class View:
 
 
     def start_mainloop(self):
+        self.initialize_root()
         self.root.mainloop()
 
 

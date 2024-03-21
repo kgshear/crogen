@@ -1,4 +1,5 @@
-import CrochetModel
+from src.models import CrochetModel
+
 
 class PatternObserver:
     def __init__(self):
