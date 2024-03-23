@@ -41,10 +41,10 @@ class PatternView(Frame):
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.BackButton = Button(
+            self,
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
             relief="flat"
         )
         self.BackButton.place(
@@ -53,6 +53,7 @@ class PatternView(Frame):
             width=296.0,
             height=94.0
         )
+        # self.BackButton.pack()
 
         self.canvas.create_text(
             77.0,
@@ -113,5 +114,6 @@ class PatternView(Frame):
             outline="")
         # parent.resizable(False, False)
         # parent.mainloop()
+        self.canvas.pack()
 
 # PatternView(Tk())

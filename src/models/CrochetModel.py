@@ -1,4 +1,4 @@
-import CrochetStitch
+from .CrochetStitch import CrochetStitch, Row, Chain, SingleCrochet
 import bpy
 import os
 
@@ -9,7 +9,7 @@ class CrochetModel:
     def __init__(self):
         self.row_length = 0
         self.observers = []
-        self.cur_row = CrochetStitch.Row()
+        self.cur_row = Row()
         self.rows = []
         self.model_dict = {}
         self.init_stitches()
@@ -17,15 +17,15 @@ class CrochetModel:
     def init_stitches(self):
         bpy.ops.wm.read_factory_settings(use_empty=True)
 
-    def addToRow(self, type: CrochetStitch, amount):
+    def addToRow(self, type, amount):
         for n in range(0, amount):
             self.cur_row.add_stitch(type)
 
     def newRow(self):
-        self.cur_row = CrochetStitch.Row()
+        self.cur_row = Row()
         self.rows.append(self.cur_row)
 
-    def addStitch(self, type: CrochetStitch):
+    def addStitch(self, type):
         self.cur_row.add_stitch(type)
         # self.notifyObservers()
 
@@ -79,10 +79,10 @@ class CrochetModel:
 if __name__ == "__main__":
     model = CrochetModel()
     model.newRow()
-    model.addToRow(CrochetStitch.SingleCrochet(), 20)
-    model.addToRow(CrochetStitch.Chain(), 20)
+    model.addToRow(SingleCrochet(), 20)
+    model.addToRow(Chain(), 20)
     model.newRow()
-    model.addToRow(CrochetStitch.Chain(), 20)
+    model.addToRow(Chain(), 20)
     model.newRow()
-    model.addToRow(CrochetStitch.SingleCrochet(), 20)
+    model.addToRow(SingleCrochet(), 20)
     model.build()

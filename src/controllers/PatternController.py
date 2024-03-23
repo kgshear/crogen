@@ -10,7 +10,8 @@ class PatternController:
 
 
     def _bind(self):
-        self.frame.BackButton.config(command=self.back_command())
+        self.frame.BackButton.config(command=self.back_command)
 
     def back_command(self):
-        pass
+        self.view.switch("creation")
+        print("Switching from pattern to creation")

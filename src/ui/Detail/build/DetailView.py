@@ -12,7 +12,7 @@ def relative_to_assets(path: str) -> Path:
 class DetailView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.configure(bg = "#FFFFFF")
+        self.configure(bg= "#FFFFFF")
 
 
         self.canvas = Canvas(
@@ -61,21 +61,10 @@ class DetailView(Frame):
             font=("Karla Bold", 40 * -1)
         )
     
-        button_image_1 = PhotoImage(
+        self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
-        self.NextButton = Button(
-            image=button_image_1,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
-            relief="flat"
-        )
-        self.NextButton.place(
-            x=1070.0,
-            y=679.0,
-            width=296.0,
-            height=94.0
-        )
+
+
     
         self.canvas.create_rectangle(
             542.0,
@@ -128,5 +117,18 @@ class DetailView(Frame):
             outline="")
         # parent.resizable(False, False)
         # parent.mainloop()
+        self.canvas.pack()
+        self.NextButton = Button(
+            self,
+            image=self.button_image_1,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+        self.NextButton.place(
+            x=1070.0,
+            y=679.0,
+            width=296.0,
+            height=94.0
+        )
     
-# DetailView(Tk())

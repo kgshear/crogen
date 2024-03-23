@@ -137,10 +137,10 @@ class CreationView(Frame):
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.ClearButton = Button(
+            self,
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
             relief="flat"
         )
         self.ClearButton.place(
@@ -216,10 +216,10 @@ class CreationView(Frame):
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
         self.AddButton = Button(
+            self,
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("add button clicked"),
             relief="flat"
         )
         self.AddButton.place(
@@ -232,10 +232,10 @@ class CreationView(Frame):
         self.button_image_3 = PhotoImage(
             file=relative_to_assets("button_3.png"))
         self.RedoButton = Button(
+            self,
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("redo clicked"),
             relief="flat"
         )
         self.RedoButton.place(
@@ -248,10 +248,10 @@ class CreationView(Frame):
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
         self.UndoButton = Button(
+            self,
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("undo clicked"),
             relief="flat"
         )
         self.UndoButton.place(
@@ -264,10 +264,10 @@ class CreationView(Frame):
         self.button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
         self.RepeatButton = Button(
+            self,
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_5 clicked"),
             relief="flat"
         )
         self.RepeatButton.place(
@@ -280,10 +280,10 @@ class CreationView(Frame):
         self.button_image_6 = PhotoImage(
             file=relative_to_assets("button_6.png"))
         self.BackButton = Button(
+            self,
             image=self.button_image_6,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_6 clicked"),
             relief="flat"
         )
         self.BackButton.place(
@@ -296,10 +296,10 @@ class CreationView(Frame):
         self.button_image_7 = PhotoImage(
             file=relative_to_assets("button_7.png"))
         self.CreateButton = Button(
+            self,
             image=self.button_image_7,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
             relief="flat"
         )
         self.CreateButton.place(
@@ -358,4 +358,5 @@ class CreationView(Frame):
             535.0,
             fill="#D9D9D9",
             outline="")
+        self.canvas.pack()
 

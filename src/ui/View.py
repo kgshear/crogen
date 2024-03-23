@@ -7,32 +7,32 @@ from src.ui import Crogen
 
 class View:
     def __init__(self):
-        self.root = None  # Initialize root as None
-        self.frame_classes = { #TODO fix???
-            "detail": DetailView(),
-            "creation": CreationView(),
-            "pattern": PatternView(),
-        }
-        self.current_frame = None
+        self.root = Crogen.Crogen()  # Initialize root as None
+        self.frame_classes = {}
+        self._add_frame(PatternView, "pattern")
+        self._add_frame(CreationView, "creation")
+        self._add_frame(DetailView, "detail")
 
-    def initialize_root(self):
-        if self.root is None:  # Only create root if it's not already created
-            self.root = Crogen.Crogen()
+
+
+
+
+    def _add_frame(self, Frame, name):
+        self.frame_classes[name] = Frame(self.root)
+        self.frame_classes[name].grid(row=0, column=0, sticky="nsew")
 
     def switch(self, name):
-        new_frame = self.frame_classes[name](self.root)
-        if self.current_frame is not None:
-            self.current_frame.destroy()
-        self.current_frame = new_frame
-        self.current_frame.grid(row=0, column=0, sticky="nsew")
+        #if self.current_frame is not None:
+        #    self.current_frame.destroy()
+        self.frame_classes[name].tkraise()
+        #self.current_frame.grid(row=0, column=0, sticky="nsew")
+
 
 
     def start_mainloop(self):
-        self.initialize_root()
         self.root.mainloop()
 
 
 if __name__ == '__main__':
     view = View()
-    view.initialize_root()  # Initialize the root window
     view.start_mainloop()
