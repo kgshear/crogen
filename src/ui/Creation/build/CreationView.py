@@ -2,7 +2,7 @@
 from pathlib import Path
 
 
-from tkinter import Tk, Canvas, Button, PhotoImage, Frame
+from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -11,6 +11,7 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
 
 class CreationView(Frame):
     def __init__(self, *args, **kwargs):
@@ -54,13 +55,10 @@ class CreationView(Frame):
             font=("Karla Regular", 36 * -1)
         )
 
-        self.image_image_1 = PhotoImage(
-            file=relative_to_assets("image_1.png"))
-        self.image_1 = self.canvas.create_image(
-            989.0,
-            244.0,
-            image=self.image_image_1
-        )
+
+
+
+
 
         self.canvas.create_rectangle(
             340.0,
@@ -150,68 +148,39 @@ class CreationView(Frame):
             height=77.48383331298828
         )
 
-        self.canvas.create_text(
-            406.0,
-            187.0,
-            anchor="nw",
-            text="single",
-            fill="#000000",
-            font=("Karla Regular", 24 * -1)
-        )
+        self.stitch_type = StringVar(self)
+        self.stitch_type.set("Single")  # Default selection
+        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Single", "Chain")
+        self.canvas.create_window(380, 205.0, window=self.stitch_dropdown)
+
+        self.amount_select = StringVar(self)
+        self.amount_select.set("1")  # Default selection
+        self.amount_list = ["1", "2", "3", "4", "5"]
+        self.amount_dropdown = OptionMenu(self, self.amount_select, *self.amount_list)
+        self.canvas.create_window(400, 265.0, window=self.amount_dropdown)
+
+
 
         self.canvas.create_text(
-            468.0,
-            245.0,
-            anchor="nw",
-            text="1",
-            fill="#000000",
-            font=("Karla Regular", 24 * -1)
-        )
-
-        self.canvas.create_text(
-            406.0,
-            187.0,
-            anchor="nw",
-            text="single",
-            fill="#000000",
-            font=("Karla Regular", 24 * -1)
-        )
-
-        self.canvas.create_text(
-            269.0,
-            185.0,
+            270.0,
+            190.0,
             anchor="nw",
             text="type:",
             fill="#000000",
             font=("Karla Medium", 24 * -1)
         )
 
-        self.canvas.create_text(
-            269.0,
-            312.0,
-            anchor="nw",
-            text="stitch or row:",
-            fill="#000000",
-            font=("Karla Medium", 24 * -1)
-        )
 
         self.canvas.create_text(
-            269.0,
-            245.0,
+            270.0,
+            250.0,
             anchor="nw",
             text="amount:",
             fill="#000000",
             font=("Karla Medium", 24 * -1)
         )
 
-        self.canvas.create_text(
-            457.0,
-            309.0,
-            anchor="nw",
-            text="select",
-            fill="#000000",
-            font=("Karla Regular", 24 * -1)
-        )
+
 
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
@@ -263,14 +232,14 @@ class CreationView(Frame):
 
         self.button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
-        self.RepeatButton = Button(
+        self.NewButton = Button(
             self,
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
             relief="flat"
         )
-        self.RepeatButton.place(
+        self.NewButton.place(
             x=20.0,
             y=419.0,
             width=215.0,
@@ -358,5 +327,23 @@ class CreationView(Frame):
             535.0,
             fill="#D9D9D9",
             outline="")
+
+        self.canvas.create_rectangle(
+            635,
+            30,
+            1343,
+            491.5,
+            fill="#FFFFFF",
+            outline="")
+
+        self.model_image = PhotoImage(file=relative_to_assets("model.png"))
+        self.model_object = self.canvas.create_image(989.0,
+                                                     260.0, image=self.model_image)
         self.canvas.pack()
+
+    def update_png(self):
+        self.model_image = PhotoImage(file=relative_to_assets("model.png"))
+
+
+
 

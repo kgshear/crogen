@@ -38,8 +38,9 @@ class SingleCrochet(CrochetStitch):
         self.import_name = "SingleCrochet" + self.calc_import_name()
 
 
+
     def get_file_path(self):
-        file_path = os.getcwd() + "/assets/single-crochet.blend"
+        file_path = os.getcwd() + "/models/assets/single-crochet.blend"
         return file_path
 
     def calc_import_name(self):
@@ -64,7 +65,7 @@ class Chain(CrochetStitch):
         self.import_name = "ChainStitch" + self.calc_import_name()
 
     def get_file_path(self):
-        file_path = os.getcwd() + "/assets/chain-stitch.blend"
+        file_path = os.getcwd() + "/models/assets/chain-stitch.blend"
         return file_path
 
     def calc_import_name(self):
@@ -107,6 +108,7 @@ class Row():
         self.max_size = max_size
         self.remainder = []
         self.row_finished = False
+        self.tuples = []
 
     def set_array(self, stitch_array):
         self.stitch_array = stitch_array
@@ -141,23 +143,27 @@ class Row():
     def to_string(self):
         pass
 
-    def get_tuples(self):
+    def get_tuples(self, modified_indexes):
         # returns tuples with (stitch-type, amount)
         # ex: if stitch_array is [SC, SC, C, SC], tuples are [(SC, 2), (C, 1), (SC, 1)]
-        result = []
+        # only computes tuples of modified stitches
+
         count = 0
         last_stitch = None
-        for stitch in self.stitch_array:
-            if type(stitch) != type(last_stitch):
-                if last_stitch is not None:
-                    result.append((last_stitch, count))
+        print(self.array_size, modified_indexes[0])
+        for stitch in self.stitch_array[modified_indexes[0]:]:
+
+            if (stitch != last_stitch):
+                # if last_stitch is not None:
+                #     # self.tuples.append((last_stitch(), count))
                 last_stitch = stitch
                 count = 1
             else:
                 count += 1
         if last_stitch is not None:
-            result.append((last_stitch, count))
-        return result
+            self.tuples.append((last_stitch(), count))
+            print("here", last_stitch, count)
+        return self.tuples
 
 
 if __name__ == "__main__":
@@ -166,7 +172,7 @@ if __name__ == "__main__":
     row.add_stitch(Chain())
     row.add_stitch(SingleCrochet())
     row.add_stitch(SingleCrochet())
-    print(row.get_tuples())
+    # print(row.get_tuples())
 
 
 
