@@ -3,6 +3,7 @@ from pathlib import Path
 
 from tkinter import Canvas, Button, PhotoImage, Tk, Frame
 
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
@@ -13,6 +14,8 @@ class DetailView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(bg= "#FFFFFF")
+
+
 
 
         self.canvas = Canvas(

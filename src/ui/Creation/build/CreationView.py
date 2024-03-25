@@ -2,8 +2,9 @@
 from pathlib import Path
 
 
-from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu
-
+from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu, Entry
+import numpy as np
+from PIL import Image
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -17,6 +18,10 @@ class CreationView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(bg="#FFFFFF")
+        img = np.zeros([100, 100, 3], dtype=np.uint8)
+        img.fill(255)  # numpy array!
+        im = Image.fromarray(img)  # convert numpy array to image
+        im.save(relative_to_assets("model.png"))
 
         self.canvas = Canvas(
             self,
@@ -149,15 +154,15 @@ class CreationView(Frame):
         )
 
         self.stitch_type = StringVar(self)
-        self.stitch_type.set("Single")  # Default selection
-        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Single", "Chain")
+        self.stitch_type.set("Chain")  # Default selection
+        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Chain", "Single")
         self.canvas.create_window(380, 205.0, window=self.stitch_dropdown)
 
         self.amount_select = StringVar(self)
         self.amount_select.set("1")  # Default selection
-        self.amount_list = ["1", "2", "3", "4", "5"]
-        self.amount_dropdown = OptionMenu(self, self.amount_select, *self.amount_list)
-        self.canvas.create_window(400, 265.0, window=self.amount_dropdown)
+        self.amount_entry = Entry(self, textvariable= self.amount_select,  bg="lightgray")
+        self.canvas.create_window(430, 265.0, window=self.amount_entry)
+
 
 
 
