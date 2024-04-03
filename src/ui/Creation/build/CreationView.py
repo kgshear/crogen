@@ -18,10 +18,7 @@ class CreationView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(bg="#FFFFFF")
-        img = np.zeros([100, 100, 3], dtype=np.uint8)
-        img.fill(255)  # numpy array!
-        im = Image.fromarray(img)  # convert numpy array to image
-        im.save(relative_to_assets("model.png"))
+        self.set_empty()
 
         self.canvas = Canvas(
             self,
@@ -155,7 +152,7 @@ class CreationView(Frame):
 
         self.stitch_type = StringVar(self)
         self.stitch_type.set("Chain")  # Default selection
-        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Chain", "Single")
+        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Chain", "Single", "Double", "Half-Double", "Slip")
         self.canvas.create_window(380, 205.0, window=self.stitch_dropdown)
 
         self.amount_select = StringVar(self)
@@ -348,6 +345,14 @@ class CreationView(Frame):
 
     def update_png(self):
         self.model_image = PhotoImage(file=relative_to_assets("model.png"))
+
+
+    def set_empty(self):
+        img = np.zeros([100, 100, 3], dtype=np.uint8)
+        img.fill(255)  # numpy array!
+        im = Image.fromarray(img)  # convert numpy array to image
+        im.save(relative_to_assets("model.png"))
+        self.update_png()
 
 
 

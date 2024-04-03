@@ -1,4 +1,4 @@
-from .CrochetStitch import CrochetStitch, Row, Chain, SingleCrochet
+from .CrochetStitch import CrochetStitch, Row, Chain, SingleCrochet, VerticalChain, SlipStitch, DoubleCrochet, HalfDouble
 import bpy
 import os
 
@@ -11,11 +11,12 @@ class CrochetModel:
         self.observers = []
         self.cur_row = Row()
         self.rows = []
-        self.model_dict = {"Single": SingleCrochet, "Chain": Chain}
+        self.model_dict = {"Single": SingleCrochet, "Chain": Chain, "Double": DoubleCrochet, "Slip": SlipStitch, "Half-Double": HalfDouble}
         self.camera = None
         self.light = None
         self.init_stitches()
         self.modified_objects = []
+        self.last_command = None
 
 
     def init_stitches(self):
@@ -29,6 +30,9 @@ class CrochetModel:
         self.light = bpy.context.object
         bpy.context.scene.render.engine = 'BLENDER_WORKBENCH'
 
+        Chain().reset_count(), SingleCrochet().reset_count(), SlipStitch().reset_count(),
+        DoubleCrochet().reset_count(), HalfDouble().reset_count()
+
     def addToRow(self, type, amount):
         self.modified_objects.clear()
         stitch = self.model_dict[type]
@@ -38,6 +42,7 @@ class CrochetModel:
             self.cur_row.add_stitch(stitch)
             self.modified_objects.append(self.cur_row.array_size-1) #index of modified stitch
         self.build()
+        self.last_command = self.addToRow
 
 
 
@@ -46,8 +51,13 @@ class CrochetModel:
             self.rows.append(self.cur_row)
             self.cur_row = Row()
             self.row_length += 1
+            self.last_command = self.newRow
+            # self.cur_row.add_stitch(VerticalChain) #new row- add verticle chain to end of row
+            # self.modified_objects.append(self.cur_row.array_size - 1)
+            # self.build()
         for row in self.rows:
             print(row.stitch_array)
+
 
     def addStitch(self, type):
         self.cur_row.add_stitch(type)
@@ -55,7 +65,7 @@ class CrochetModel:
     def clearPattern(self):
         self.row_length = 0
         self.rows = []
-        self.cur_row = None
+        self.cur_row = Row()
         self.init_stitches()
 
     def init_build(self):
@@ -70,7 +80,6 @@ class CrochetModel:
         all_rows = self.rows + [self.cur_row]
         new_x = 0
         for index, row in enumerate(all_rows):
-
             new_x = 0
             if (index == len(all_rows) - 1): # if at cur_row
                 stitch_tuples = row.get_tuples(self.modified_objects)
@@ -90,8 +99,7 @@ class CrochetModel:
                             array_modifier.constant_offset_displace[1] = offset_xyz[1]
                             array_modifier.constant_offset_displace[2] = offset_xyz[2]
                     new_x += offset_xyz[0] * count
-
-            new_z += .005
+            new_z += row.max_height * .9
         if (new_z == 0):
             new_z = .001
         self.camera.location = (new_x/2, (new_x + new_z) * 2, new_z/2 )
@@ -114,10 +122,16 @@ class CrochetModel:
     #         bpy.ops.render.render(write_still=True)
     #     subject.rotation_euler = original_rotation
     def redo(self):
-        pass
+        bpy.ops.ed.redo()
+        # doesn't have
 
-    def undo(self):
-        pass
+    def undo(self): #pressing undo when they have no stitches in their row means they want to undo "add row"
+        if self.cur_row.get_array_size() == 0:
+            if len(self.rows) != 0:
+                self.cur_row = self.rows[-1]
+        else:
+            bpy.ops.ed.undo_push()
+            self.cur_row.undo()
 
     # def addObserver(self, observer: PatternObserver):
     #     self.observers.append(observer)

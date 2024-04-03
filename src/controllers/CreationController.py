@@ -31,6 +31,7 @@ class CreationController:
         pass
 
     def clear_command(self):
+        self.frame.set_empty()
         self.model.clearPattern()
 
     def create_command(self):
