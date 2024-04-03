@@ -8,7 +8,7 @@ CrochetStitch.py contains all of the different stitch types
 Crogen.py will be used to run the application
 
 In the folder ui:
-Abstractions contains the base Model and base View class, which are abstract classes that will be inherited by any Models and Views used in the code
+contains Creation, Build, and Detail. Also contains View.py which holds the different views
 
 Creation contains all of the files related to the creation window
 > build contains assets and CreationView
@@ -23,3 +23,8 @@ Pattern contains all of the files related to the pattern window
 > assets are pictures used in the PatternView and PatternView contains the Tkinter Code for the Pattern Window gui
 
 
+In the folder Controller:
+contains controllers for the various view files, manages views
+
+In the folder Model:
+contains 3D models and contains the CrochetModel and CrochetStitch classes which hold the data of the 3D model the user is creating
