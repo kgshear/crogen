@@ -15,20 +15,28 @@ class CreationController:
         self.frame.AddButton.config(command=self.add_command)
         self.frame.NewButton.config(command=self.new_command)
         self.frame.UndoButton.config(command=self.undo_command)
+        self.frame.RedoButton.config(command=self.redo_command)
         self.frame.CreateButton.config(command=self.create_command)
         self.frame.BackButton.config(command=self.back_command)
 
     def add_command(self):
+        isRedo = False
         amount = self.frame.amount_select.get()
         stitch_type = self.frame.stitch_type.get()
-        self.model.addToRow(stitch_type, int(amount))
+        self.model.addToRow(stitch_type, int(amount), isRedo)
         self.update_image()
 
     def new_command(self):
-        self.model.newRow()
+        isRedo = False
+        self.model.newRow(isRedo)
 
     def undo_command(self):
-        pass
+        self.model.undo()
+        self.update_image()
+
+    def redo_command(self):
+        self.model.redo()
+        self.update_image()
 
     def clear_command(self):
         self.frame.set_empty()
