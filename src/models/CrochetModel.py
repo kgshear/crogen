@@ -1,4 +1,4 @@
-from .CrochetStitch import CrochetStitch, Row, Chain, SingleCrochet, VerticalChain, SlipStitch, DoubleCrochet, HalfDouble
+from .CrochetStitch import CrochetStitch, Row, Chain, SingleCrochet, SlipStitch, DoubleCrochet, HalfDouble
 import bpy
 import os
 
@@ -43,7 +43,6 @@ class CrochetModel:
             if obj.type == 'CAMERA':
                 return obj
 
-
     def addToRow(self, type, amount, isRedo):
         self.modified_objects.clear()
         stitch = self.model_dict[type]
@@ -53,13 +52,11 @@ class CrochetModel:
             self.cur_row.add_stitch(stitch)
             self.modified_objects.append(self.cur_row.array_size-1) #index of modified stitch
 
-        self.cur_row.add_to_tuples(stitch, amount, self.modified_objects.copy())
+        self.cur_row.add_to_tuples(stitch(), amount, self.modified_objects.copy())
         self.build()
         action = {"type": "add_to_row", "param": (type, amount)}
         if not isRedo:
             self._add_to_history(action)
-
-
 
     def newRow(self, isRedo):
         if self.cur_row.array_size > 0:
@@ -75,7 +72,6 @@ class CrochetModel:
         for row in self.rows:
             print(row.stitch_array)
 
-
     def addStitch(self, type):
         self.cur_row.add_stitch(type)
 
@@ -84,11 +80,14 @@ class CrochetModel:
         self.rows = []
         self.cur_row = Row()
         self.init_scene()
+        self.history = []
+        self.redo_stack = []
 
     def build(self):
         # TODO fix camera angles
-        # TODO fix stitch overlap
-        # TODO redo not working
+        # TODO fix stitch spacing issues
+        # TODO vertical chain stitches where necessary
+        # TODO flip stitches every row
 
         #bpy.context.window_manager.print_undo_steps()
         offset_xyz = [0.01, 0, 0]
@@ -105,7 +104,6 @@ class CrochetModel:
                         model = type.get_model()
                         if (model != None):
                             print(type.get_object_name(), " ", count, (new_x, 0, new_z))
-
                             model.location = (new_x, 0, new_z)
                             array_modifier = model.modifiers.new(name="Array", type='ARRAY')
                             array_modifier.count = count
@@ -114,7 +112,7 @@ class CrochetModel:
                             array_modifier.constant_offset_displace[0] = offset_xyz[0]
                             array_modifier.constant_offset_displace[1] = offset_xyz[1]
                             array_modifier.constant_offset_displace[2] = offset_xyz[2]
-                    new_x += offset_xyz[0] * count
+                    new_x += offset_xyz[0] * (count+1)
             new_z += row.get_max_height() * .7
         if (new_z == 0):
             new_z = .001
@@ -123,6 +121,7 @@ class CrochetModel:
         bpy.ops.ed.undo_push(message=str(self.build_count))
         self.save_png()
         self.build_count += 1
+        self.generate_written_pattern()
 
     def save_png(self):
         output_blend_file_path = os.getcwd() + "/models/assets/new_pattern.blend"
@@ -131,6 +130,52 @@ class CrochetModel:
         bpy.context.scene.render.filepath = png_file_path
         bpy.ops.render.render(write_still=True)
         bpy.ops.wm.save_as_mainfile(filepath=output_blend_file_path)
+
+    def generate_written_pattern(self):
+
+       # chain and turn
+        # hdc 2
+        # dc 3
+        # slip, sc ch 1
+
+       # after first row
+       # hdc 3 from hook
+       # dc 4 from hook
+       # sc 2 from hook
+
+        written_pattern = ""
+        row_num = 1
+        all_rows = self.rows + [self.cur_row]
+        first_row = all_rows[0]
+        last_row = all_rows[-1]
+        for idx, row in enumerate(all_rows):
+            if row.get_array_size() != 0:
+                row_string = f'Row {row_num}: '
+                if row != first_row:
+                    # if not first row, determine how many stitches away from
+                    # current stitch to insert hook
+                    first_stitch = row.get_tuples()[0][0]
+                    row_string += first_stitch.to_string_from_stitch()
+
+                row_string += f'{row.to_string()}'
+                if row != last_row:
+                    # if not last row, determine how many chain stitches need to be made
+                    # to accomodate stitch in next row
+                    next_row = all_rows[idx+1]
+                    if next_row.get_array_size() != 0:
+                        next_stitch = next_row.tuples[0][0]
+                        row_string += f", {next_stitch.to_string_turning()}"
+                row_num += 1
+                row_string += "\n"
+                written_pattern += row_string
+
+        print("written pattern ", written_pattern)
+        return written_pattern
+
+
+
+
+
 
     # def save_png(self, output_dir, output_file_pattern_string = 'render%d.jpg', rotation_steps = 32, rotation_angle = 360.0, subject = bpy.context.object):
     #     original_rotation = subject.rotation_euler
@@ -172,11 +217,24 @@ class CrochetModel:
                 self.cur_row = self.rows.pop(-1)
             self.redo_stack.append(action)
 
+    def get_stitch_count(self):
+        count = 0
+        for row in self.rows:
+            count += row.get_array_size()
+        count += self.cur_row.get_array_size()
+        return count
+
+    def get_row_count(self):
+        count = len(self.rows)
+        if self.cur_row.get_array_size() > 0:
+            count += 1
+        return count
+
 if __name__ == "__main__":
     model = CrochetModel()
-    model.newRow()
-    model.addToRow("Single", 20)
-    model.addToRow("Chain", 20)
-    model.newRow()
-    model.addToRow("Single", 20)
+    # model.newRow()
+    # model.addToRow("Single", 20)
+    # model.addToRow("Chain", 20)
+    # model.newRow()
+    # model.addToRow("Single", 20)
 

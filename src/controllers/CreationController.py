@@ -23,26 +23,48 @@ class CreationController:
         isRedo = False
         amount = self.frame.amount_select.get()
         stitch_type = self.frame.stitch_type.get()
-        self.model.addToRow(stitch_type, int(amount), isRedo)
-        self.update_image()
+        if amount.isnumeric():
+            amount = int(amount)
+            if amount > 100:
+                pass
+            else:
+                self.model.addToRow(stitch_type, amount, isRedo)
+                self.update_image()
+        else:
+            pass
+        self.frame.update_row_count(self.model.get_row_count())
+        self.frame.update_stitch_count(self.model.get_stitch_count())
+        self.frame.canvas.update_idletasks()
 
     def new_command(self):
         isRedo = False
         self.model.newRow(isRedo)
 
     def undo_command(self):
+        self.frame.update_row_count(self.model.get_row_count())
+        self.frame.update_stitch_count(self.model.get_stitch_count())
         self.model.undo()
         self.update_image()
+        self.frame.canvas.update_idletasks()
+
 
     def redo_command(self):
+        self.frame.update_row_count(self.model.get_row_count())
+        self.frame.update_stitch_count(self.model.get_stitch_count())
         self.model.redo()
         self.update_image()
+        self.frame.canvas.update_idletasks()
 
     def clear_command(self):
+        self.frame.update_row_count(self.model.get_row_count())
+        self.frame.update_stitch_count(self.model.get_stitch_count())
         self.frame.set_empty()
         self.model.clearPattern()
+        self.frame.canvas.update_idletasks()
+
 
     def create_command(self):
+        #TODO generate written pattern
         self.view.switch("pattern")
         print("switching from creation to pattern")
 

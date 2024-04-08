@@ -2,7 +2,7 @@
 from pathlib import Path
 
 
-from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu, Entry
+from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu, Entry, Label
 import numpy as np
 from PIL import Image
 
@@ -19,6 +19,8 @@ class CreationView(Frame):
         super().__init__(*args, **kwargs)
         self.configure(bg="#FFFFFF")
         self.set_empty()
+        self.row_count = "0"
+        self.stitch_count = "0"
 
         self.canvas = Canvas(
             self,
@@ -43,7 +45,7 @@ class CreationView(Frame):
             642.0,
             631.0,
             anchor="nw",
-            text="Stitch Count:",
+            text="Row Count:",
             fill="#FFFFFF",
             font=("Karla Regular", 36 * -1)
         )
@@ -52,15 +54,10 @@ class CreationView(Frame):
             647.0,
             707.0,
             anchor="nw",
-            text="Row Count:",
+            text="Stitch Count:",
             fill="#FFFFFF",
             font=("Karla Regular", 36 * -1)
         )
-
-
-
-
-
 
         self.canvas.create_rectangle(
             340.0,
@@ -133,6 +130,10 @@ class CreationView(Frame):
             759.0,
             fill="#FFFFFF",
             outline="")
+        # label = Label(label_frame, text=”  # Text which you want to show in label”)
+        # self.row_label = Label(930, 660.0, text=self.stitch_count, font=("Karla Regular", 36 * -1))
+        self.row_text = self.canvas.create_text(930, 660.0, text=self.row_count, fill="black", font=("Karla Regular", 36 * -1))
+        self.stitch_text = self.canvas.create_text(930, 737.0, text=self.stitch_count, fill="black", font=("Karla Regular", 36 * -1))
 
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
@@ -353,6 +354,17 @@ class CreationView(Frame):
         im = Image.fromarray(img)  # convert numpy array to image
         im.save(relative_to_assets("model.png"))
         self.update_png()
+
+    def update_stitch_count(self, new_count):
+        self.stitch_count = new_count
+
+        #with object ID I on a canvas C with the text from a string S, call C.itemconfigure(I, text=S).
+        self.canvas.itemconfigure(self.stitch_text, text=self.stitch_count)
+
+    def update_row_count(self, new_count):
+        self.row_count = new_count
+        self.canvas.itemconfigure(self.row_text, text=self.row_count)
+
 
 
 

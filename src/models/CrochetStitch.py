@@ -4,14 +4,13 @@ import math
 class CrochetStitch:
     # different 3D design per stitch
     def __init__(self):
+        self.abbrev = "st"
+        self.turning_num = 0
+        self.hook_dist_num = 0
         self.object_name = "NurbsCurve"
         self.import_name = "NurbsCurve"
         self.rotation = 0
 
-
-    def to_string(self):
-        # this will be how we transcribe pattern in a written format
-        pass
     def get_file_path(self):
         pass
 
@@ -45,67 +44,112 @@ class CrochetStitch:
     def get_object_name(self):
         return self.object_name
 
-    def reset_count(self):
-        pass
+    def get_abbrev(self):
+        return self.abbrev
+
+    def to_string(self):
+        # how many stitches to put in row
+        st_string = f"({self.abbrev} in every stitch across) x insert_amount"
+        return st_string
+
+    def to_string_turning(self):
+        # how many stitches to chain when starting a new row
+        st_string = f"ch {self.turning_num} and turn. "
+        return st_string
+
+    def to_string_from_stitch(self):
+        # when starting a new row, this guides where to put the stitch
+        st_string = f"yo, insert hook {self.hook_dist_num} stitches away from hook. "
+        return st_string
+
+    # def to_string_switch_stitch(self):
+    #     st_string = f"ch {self.turning_num}"
+    #     return st_string
+
+    def switch_string(self, stitch):
+        #  how much to ch when going from one stitch type to another
+        st_string = ""
+        if self.turning_num >= stitch.turning_num:
+            return st_string
+        else:
+            st_string = f"ch {stitch.turning_num- self.turning_num}, "
+            return st_string
+
 
 class SingleCrochet(CrochetStitch):
-    object_name = "SingleCrochet"
     def __init__(self):
         super().__init__()
         self.object_name = "SingleCrochet"
+        self.abbrev = "sc"
+        self.turning_num = 1
+        self.hook_dist_num = 2
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/single-crochet.blend"
         return file_path
 
 class Chain(CrochetStitch):
-    object_name = "ChainStitch"
     def __init__(self):
         super().__init__()
         self.object_name = "ChainStitch"
+        self.abbrev = "ch"
+        self.turning_num = 0
+        self.hook_dist_num = 0
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/chain-stitch.blend"
         return file_path
 
-class VerticalChain(CrochetStitch):
-    object_name = "ChainStitch"
-    def __init__(self):
-        super().__init__()
-        self.object_name = "ChainStitch"
-        self.rotation = 50
+    def to_string(self):
+        st_string = "ch insert_amount"
+        return st_string
 
-    def get_file_path(self):
-        file_path = os.getcwd() + "/models/assets/chain-stitch.blend"
-        return file_path
+    def to_string_turning(self):
+        empty_str = ""
+        return empty_str
+
+    def to_string_from_stitch(self):
+        empty_str = ""
+        return empty_str
 
 class SlipStitch(CrochetStitch):
-    object_name = "SlipStitch"
     def __init__(self):
         super().__init__()
         self.object_name = "SlipStitch"
+        self.abbrev = "sl st"
+        self.turning_num = 0
+        self.hook_dist_num = 2
 
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/slip-stitch.blend"
         return file_path
 
+    def to_string_turning(self):
+        empty_str = ""
+        return empty_str
+
 class DoubleCrochet(CrochetStitch):
-    object_name = "DoubleCrochet"
 
     def __init__(self):
         super().__init__()
         self.object_name = "DoubleCrochet"
+        self.abbrev = "dc"
+        self.turning_num = 3
+        self.hook_dist_num = 4
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/double-crochet.blend"
         return file_path
 
 class HalfDouble(CrochetStitch):
-    object_name = "HalfDouble"
+
     def __init__(self):
         super().__init__()
         self.object_name = "HalfDouble"
+        self.abbrev = "hdc"
+        self.turning_num = 2
+        self.hook_dist_num = 3
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/half-double-crochet.blend"
@@ -118,10 +162,10 @@ class Row():
         self.array_size = array_size
         self.tuples = []
         self.max_height = 0
-        self.height_dict = {"DoubleCrochet": 0.029654, "HalfDouble": 0.026165, "ChainStitch": 0.007266,
-                            "SingleCrochet":0.00921, "SlipStitch": 0.006553}
-        self.width_dict = {"DoubleCrochet": 0.021465, "HalfDouble": 0.018758, "ChainStitch": 0.017289,
-                            "SingleCrochet": 0.009214, "SlipStitch": 0.021793}
+        self.height_dict = {"DoubleCrochet": 0.035634, "HalfDouble": 0.028855, "ChainStitch": 0.007266,
+                            "SingleCrochet":0.009214, "SlipStitch": 0.006553}
+        self.width_dict = {"DoubleCrochet": 0.02, "HalfDouble": 0.02, "ChainStitch": 0.02,
+                            "SingleCrochet": 0.02, "SlipStitch": 0.02}
         self.modified_stack = []
 
     def get_array(self):
@@ -134,15 +178,12 @@ class Row():
         return self.max_height
 
     def add_stitch(self, stitch):
-        print("here is modified", self.modified_stack)
+        #print("here is modified", self.modified_stack)
         self.stitch_array.append(stitch)
         self.array_size += 1
-        height = self.height_dict[stitch.object_name]
+        height = self.height_dict[stitch().object_name]
         if height > self.max_height:
             self.max_height = height
-
-    def to_string(self):
-        pass
 
     def undo(self):
         last_modified = self.modified_stack.pop()
@@ -154,11 +195,27 @@ class Row():
 
     def add_to_tuples(self, stitch, amount, modified_indexes):
         self.modified_stack.append(modified_indexes)
-        self.tuples.append((stitch(), amount))
-
+        self.tuples.append((stitch, amount))
 
     def get_tuples(self):
         return self.tuples
+
+    def to_string(self):
+        count = 0
+        row_string = ""
+        for stitch, amount in self.tuples:
+            last_tuple = self.tuples[-1]
+
+            row_string += stitch.to_string().replace("insert_amount", str(amount))
+            if (stitch, amount) != last_tuple:
+                row_string += ", "
+                next_tuple = self.tuples[count+1]
+                row_string += stitch.switch_string(next_tuple[0])
+
+            count += 1
+        return row_string
+
+
 
 
 if __name__ == "__main__":
