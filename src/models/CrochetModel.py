@@ -88,9 +88,9 @@ class CrochetModel:
         # TODO fix stitch spacing issues
         # TODO vertical chain stitches where necessary
         # TODO flip stitches every row
+        # TODO restrict illegal crochet moves
 
-        #bpy.context.window_manager.print_undo_steps()
-        offset_xyz = [0.01, 0, 0]
+        offset_xyz = [0.5, 0, 0]
         new_z = 0
         all_rows = self.rows + [self.cur_row]
         new_x = 0
@@ -106,14 +106,14 @@ class CrochetModel:
                             print(type.get_object_name(), " ", count, (new_x, 0, new_z))
                             model.location = (new_x, 0, new_z)
                             array_modifier = model.modifiers.new(name="Array", type='ARRAY')
-                            array_modifier.count = count
-                            array_modifier.use_relative_offset = False
-                            array_modifier.use_constant_offset = True
-                            array_modifier.constant_offset_displace[0] = offset_xyz[0]
-                            array_modifier.constant_offset_displace[1] = offset_xyz[1]
-                            array_modifier.constant_offset_displace[2] = offset_xyz[2]
-                    new_x += offset_xyz[0] * (count+1)
-            new_z += row.get_max_height() * .7
+                            array_modifier.count = count 
+                            array_modifier.use_relative_offset = True
+                            array_modifier.use_constant_offset = False
+                            array_modifier.relative_offset_displace[0] = offset_xyz[0]
+                            array_modifier.relative_offset_displace[1] = offset_xyz[1]
+                            array_modifier.relative_offset_displace[2] = offset_xyz[2]
+                    new_x += .01 * (count)
+            new_z += row.get_max_height() * .8
         if (new_z == 0):
             new_z = .001
         camera = self.get_camera_object()

@@ -49,7 +49,7 @@ class CrochetStitch:
 
     def to_string(self):
         # how many stitches to put in row
-        st_string = f"({self.abbrev} in every stitch across) x insert_amount"
+        st_string = f"{self.abbrev} insert_amount"
         return st_string
 
     def to_string_turning(self):
@@ -100,10 +100,6 @@ class Chain(CrochetStitch):
         file_path = os.getcwd() + "/models/assets/chain-stitch.blend"
         return file_path
 
-    def to_string(self):
-        st_string = "ch insert_amount"
-        return st_string
-
     def to_string_turning(self):
         empty_str = ""
         return empty_str
@@ -124,6 +120,11 @@ class SlipStitch(CrochetStitch):
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/slip-stitch.blend"
         return file_path
+
+    def to_string(self):
+        # how many stitches to put in row
+        st_string = f"( {self.abbrev} in every stitch across) * 5"
+        return st_string
 
     def to_string_turning(self):
         empty_str = ""
@@ -162,8 +163,8 @@ class Row():
         self.array_size = array_size
         self.tuples = []
         self.max_height = 0
-        self.height_dict = {"DoubleCrochet": 0.035634, "HalfDouble": 0.028855, "ChainStitch": 0.007266,
-                            "SingleCrochet":0.009214, "SlipStitch": 0.006553}
+        self.height_dict = {"DoubleCrochet": 0.03, "HalfDouble": 0.02, "ChainStitch": 0.007266,
+                            "SingleCrochet":0.01, "SlipStitch": 0.006553}
         self.width_dict = {"DoubleCrochet": 0.02, "HalfDouble": 0.02, "ChainStitch": 0.02,
                             "SingleCrochet": 0.02, "SlipStitch": 0.02}
         self.modified_stack = []
@@ -181,9 +182,6 @@ class Row():
         #print("here is modified", self.modified_stack)
         self.stitch_array.append(stitch)
         self.array_size += 1
-        height = self.height_dict[stitch().object_name]
-        if height > self.max_height:
-            self.max_height = height
 
     def undo(self):
         last_modified = self.modified_stack.pop()
@@ -196,6 +194,9 @@ class Row():
     def add_to_tuples(self, stitch, amount, modified_indexes):
         self.modified_stack.append(modified_indexes)
         self.tuples.append((stitch, amount))
+        height = self.height_dict[stitch.object_name]
+        if height > self.max_height:
+            self.max_height = height
 
     def get_tuples(self):
         return self.tuples

@@ -41,17 +41,17 @@ class CreationController:
         self.model.newRow(isRedo)
 
     def undo_command(self):
+        self.model.undo()
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
-        self.model.undo()
         self.update_image()
         self.frame.canvas.update_idletasks()
 
 
     def redo_command(self):
+        self.model.redo()
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
-        self.model.redo()
         self.update_image()
         self.frame.canvas.update_idletasks()
 
@@ -64,8 +64,12 @@ class CreationController:
 
 
     def create_command(self):
-        #TODO generate written pattern
         self.view.switch("pattern")
+        written_pattern = self.model.generate_written_pattern()
+        next_frame = self.view.frame_classes["pattern"]
+        next_frame.update_pattern(written_pattern)
+        next_frame.canvas.update_idletasks()
+
         print("switching from creation to pattern")
 
     def back_command(self):

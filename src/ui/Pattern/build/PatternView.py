@@ -14,6 +14,7 @@ def relative_to_assets(path: str) -> Path:
 # def PatternView(parent):
 class PatternView(Frame):
     def __init__(self, *args, **kwargs):
+        self.written_pattern = ""
         super().__init__(*args, **kwargs)
 
         self.configure(bg = "#FFFFFF")
@@ -64,7 +65,7 @@ class PatternView(Frame):
             font=("Karla Bold", 48 * -1)
         )
 
-        self.canvas.create_text(
+        self.pattern_text = self.canvas.create_text(
             113.0,
             249.0,
             anchor="nw",
@@ -116,4 +117,6 @@ class PatternView(Frame):
         # parent.mainloop()
         self.canvas.pack()
 
-# PatternView(Tk())
+    def update_pattern(self, written_pattern):
+        self.canvas.itemconfigure(self.pattern_text, text=written_pattern)
+

@@ -6,6 +6,8 @@ class PatternController:
         self.view = view
         self.model = model
         self.frame = self.view.frame_classes["pattern"]
+        written_pattern = self.model.generate_written_pattern()
+
         self._bind()
 
 
