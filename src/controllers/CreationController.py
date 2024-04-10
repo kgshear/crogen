@@ -56,10 +56,10 @@ class CreationController:
         self.frame.canvas.update_idletasks()
 
     def clear_command(self):
+        self.model.clearPattern()
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
         self.frame.set_empty()
-        self.model.clearPattern()
         self.frame.canvas.update_idletasks()
 
 

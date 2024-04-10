@@ -60,8 +60,12 @@ class CrochetModel:
 
     def newRow(self, isRedo):
         if self.cur_row.array_size > 0:
+            next_row_turned = False
+            if self.cur_row.get_row_turned() == False:
+                next_row_turned = True
             self.rows.append(self.cur_row)
             self.cur_row = Row()
+            self.cur_row.set_row_turned(next_row_turned)
             self.row_length += 1
             action = {"type": "new_row"}
             if not isRedo:
@@ -84,8 +88,6 @@ class CrochetModel:
         self.redo_stack = []
 
     def build(self):
-        # TODO fix camera angles
-        # TODO fix stitch spacing issues
         # TODO vertical chain stitches where necessary
         # TODO flip stitches every row
         # TODO restrict illegal crochet moves
@@ -94,16 +96,25 @@ class CrochetModel:
         new_z = 0
         all_rows = self.rows + [self.cur_row]
         new_x = 0
+        max_length = 0
         for index, row in enumerate(all_rows):
-            new_x = 0
+            length = row.get_array_size() * .01
+            if length > max_length:
+                max_length = length
             if (index == len(all_rows) - 1): # if at cur_row
+                turned = row.get_row_turned()
                 stitch_tuples = row.get_tuples()
+                if turned:
+                    new_x = length + .01
+                else:
+                    new_x = 0
                 for tpl_idx, tpl in enumerate(stitch_tuples):
-                    type, count = tpl
+                    stitch, count = tpl
                     if (tpl_idx == len(stitch_tuples)-1): #if it is the modified stitch
-                        model = type.get_model()
+                        if turned:
+                            stitch.set_turned()
+                        model = stitch.get_model()
                         if (model != None):
-                            print(type.get_object_name(), " ", count, (new_x, 0, new_z))
                             model.location = (new_x, 0, new_z)
                             array_modifier = model.modifiers.new(name="Array", type='ARRAY')
                             array_modifier.count = count 
@@ -112,12 +123,15 @@ class CrochetModel:
                             array_modifier.relative_offset_displace[0] = offset_xyz[0]
                             array_modifier.relative_offset_displace[1] = offset_xyz[1]
                             array_modifier.relative_offset_displace[2] = offset_xyz[2]
-                    new_x += .01 * (count)
+                    if turned:
+                        new_x -= .01 * count
+                    else:
+                        new_x += .01 * count
             new_z += row.get_max_height() * .8
         if (new_z == 0):
             new_z = .001
         camera = self.get_camera_object()
-        camera.location = (new_x/2, (new_x + new_z) * 2, new_z/2 )
+        camera.location = (max_length/2, max_length * 2 + new_z, new_z/2 )
         bpy.ops.ed.undo_push(message=str(self.build_count))
         self.save_png()
         self.build_count += 1
@@ -143,11 +157,12 @@ class CrochetModel:
        # dc 4 from hook
        # sc 2 from hook
 
-        written_pattern = ""
+        written_pattern = []
         row_num = 1
         all_rows = self.rows + [self.cur_row]
         first_row = all_rows[0]
         last_row = all_rows[-1]
+
         for idx, row in enumerate(all_rows):
             if row.get_array_size() != 0:
                 row_string = f'Row {row_num}: '
@@ -167,9 +182,10 @@ class CrochetModel:
                         row_string += f", {next_stitch.to_string_turning()}"
                 row_num += 1
                 row_string += "\n"
-                written_pattern += row_string
+                written_pattern.append(row_string)
 
         print("written pattern ", written_pattern)
+        written_pattern = "".join(written_pattern)
         return written_pattern
 
 

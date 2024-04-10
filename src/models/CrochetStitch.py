@@ -37,8 +37,8 @@ class CrochetStitch:
                     highest_object = obj
         imported_object = highest_object
         bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY')
-        # rotation_angle = math.radians(self.rotation)  # Convert rotation to radians
-        # imported_object.rotation_euler.rotate_axis("Y", rotation_angle)
+        rotation_angle = math.radians(self.rotation)  # Convert rotation to radians
+        imported_object.rotation_euler.rotate_axis("Z", rotation_angle)
         return imported_object
 
     def get_object_name(self):
@@ -46,6 +46,9 @@ class CrochetStitch:
 
     def get_abbrev(self):
         return self.abbrev
+
+    def set_turned(self):
+        self.rotation = 180
 
     def to_string(self):
         # how many stitches to put in row
@@ -168,6 +171,7 @@ class Row():
         self.width_dict = {"DoubleCrochet": 0.02, "HalfDouble": 0.02, "ChainStitch": 0.02,
                             "SingleCrochet": 0.02, "SlipStitch": 0.02}
         self.modified_stack = []
+        self.row_turned = False
 
     def get_array(self):
         return self.stitch_array
@@ -177,6 +181,14 @@ class Row():
 
     def get_max_height(self):
         return self.max_height
+
+    def get_tuples(self):
+        return self.tuples
+    def get_row_turned(self):
+        return self.row_turned
+
+    def set_row_turned(self, turned):
+        self.row_turned = turned
 
     def add_stitch(self, stitch):
         #print("here is modified", self.modified_stack)
@@ -198,9 +210,6 @@ class Row():
         if height > self.max_height:
             self.max_height = height
 
-    def get_tuples(self):
-        return self.tuples
-
     def to_string(self):
         count = 0
         row_string = ""
@@ -215,8 +224,6 @@ class Row():
 
             count += 1
         return row_string
-
-
 
 
 if __name__ == "__main__":
