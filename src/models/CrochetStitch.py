@@ -277,6 +277,7 @@ class Row():
             self.max_height = height
 
     def to_string(self):
+        # TODO simplify tuples
         count = 0
         row_string = ""
         for stitch, amount in self.tuples:

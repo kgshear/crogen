@@ -88,8 +88,9 @@ class CrochetModel:
         self.redo_stack = []
 
     def build(self):
-        # TODO vertical chain stitches where necessary
+        # TODO vertical chain stitches where necessary -> i dont think i will do this on turning
         # TODO restrict illegal crochet moves
+        # TODO fix turning rows so that it builds from left to right then right to left etc.
 
         offset_xyz = [0.5, 0, 0]
         new_z = 0
@@ -105,15 +106,18 @@ class CrochetModel:
             if (index == len(all_rows) - 1): # if at cur_row
                 turned = row.get_row_turned()
                 stitch_tuples = row.get_tuples()
+
+                new_x = 0
                 if turned:
-                    new_x = length + .01
-                else:
-                    new_x = 0
+                    new_x = last_row.get_array_size() * .01 + .01
                 for tpl_idx, tpl in enumerate(stitch_tuples):
                     stitch, count = tpl
+                    # if turned:
+                    #     new_x -= count * .01
                     if (tpl_idx == len(stitch_tuples)-1): #if it is the modified stitch
                         if turned:
                             stitch.set_turned()
+
                         model = stitch.get_model()
                         if (model != None):
                             model.location = (new_x, 0, new_z)
@@ -125,48 +129,35 @@ class CrochetModel:
                             array_modifier.relative_offset_displace[1] = 0
                             array_modifier.relative_offset_displace[2] = 0
                             pos_z = new_z
-                            if last_stitch != None:
-                                num_vert = last_stitch.calc_num_vectical(stitch)
-                                if num_vert > 0:
-                                    vertical_chain = VerticalChain()
-                                    vert_model = vertical_chain.get_model()
-                                    vert_model.location = (new_x, 0, pos_z)
-                                    array_mod = vert_model.modifiers.new(name="Array", type='ARRAY')
-                                    array_mod.count = num_vert
-                                    array_mod.use_relative_offset = True
-                                    array_mod.use_constant_offset = False
-                                    array_mod.relative_offset_displace[0] = 0
-                                    array_mod.relative_offset_displace[1] = 0
-                                    array_mod.relative_offset_displace[2] = .5
-                            elif last_stitch == None and last_row != None: # if need turning stitches
+                            if last_stitch == None and last_row != None:  # if need turning stitches
+                                pos_z -= last_row.get_max_height()
                                 last_stitch = last_row.get_tuples()[-1][0]
                                 num_vert = last_stitch.get_turning_num()
                                 if num_vert > 0:
-                                    pos_z -= new_z
                                     vert_x = 0
                                     vertical_chain = VerticalChain()
 
                                     if turned:
-                                        vert_x = last_row.get_array_size() * .01
                                         vertical_chain.set_turn_left()
+                                        vert_x = last_row.get_array_size() * .01 + .01
                                     else:
                                         vertical_chain.set_turn_right()
-
                                     vert_model = vertical_chain.get_model()
-                                    pos_z -= last_stitch.get_turning_num()
 
                                     vert_model.location = (vert_x, 0, pos_z)
                                     array_mod = vert_model.modifiers.new(name="Array", type='ARRAY')
                                     array_mod.count = num_vert
-                                    array_mod.use_relative_offset = True
-                                    array_mod.use_constant_offset = False
-                                    array_mod.relative_offset_displace[0] = 0
-                                    array_mod.relative_offset_displace[1] = 0
-                                    array_mod.relative_offset_displace[2] = .5
+                                    array_mod.use_relative_offset = False
+                                    array_mod.use_constant_offset = True
+                                    array_mod.constant_offset_displace[0] = 0
+                                    array_mod.constant_offset_displace[1] = 0
+                                    array_mod.constant_offset_displace[2] = .01
 
                     last_stitch = stitch
                     if not turned:
                         new_x += .01 * count
+                    else:
+                        new_x -= .01 * count
 
             else:
                 last_row =  row
