@@ -1,7 +1,7 @@
 from src.models.CrochetModel import CrochetModel
 from src.ui.View import View
 import os
-from tkinter import PhotoImage
+from tkinter import messagebox
 
 class CreationController:
     def __init__(self, model: CrochetModel, view: View):
@@ -56,11 +56,13 @@ class CreationController:
         self.frame.canvas.update_idletasks()
 
     def clear_command(self):
-        self.model.clearPattern()
-        self.frame.update_row_count(self.model.get_row_count())
-        self.frame.update_stitch_count(self.model.get_stitch_count())
-        self.frame.set_empty()
-        self.frame.canvas.update_idletasks()
+        response = messagebox.askyesno("Copy Text", "Are you sure you want to clear the pattern? This cannot be undone")
+        if response:
+            self.model.clearPattern()
+            self.frame.update_row_count(self.model.get_row_count())
+            self.frame.update_stitch_count(self.model.get_stitch_count())
+            self.frame.set_empty()
+            self.frame.canvas.update_idletasks()
 
 
     def create_command(self):
