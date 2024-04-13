@@ -69,7 +69,7 @@ class PatternView(Frame):
             113.0,
             249.0,
             anchor="nw",
-            text="R1:  6 sc into ring (6 sts). \nR2:  2 sc in ea st around (12 st)\nR3:  *sc in next st, 2 sc in next st, repeat from * around (18 st)\nR4:  *sc in next 2 st, 2 sc in next st, repeat from * around (24 st)\nR5:  *sc in next 3 st, 2 sc in next st, repeat from * around (30 st)\nR6:  *sc in next 4 st, 2 sc in next st, repeat from * around (36 st)\nR7:  *sc in next 5 st, 2 sc in next st, repeat from * around (42 st)\nR8: *sc in next 6 st, 2 sc in next st, repeat from * around (48 st)",
+            text="",
             fill="#FFFFFF",
             font=("Karla Regular", 24 * -1)
         )
@@ -104,6 +104,22 @@ class PatternView(Frame):
             147.0,
             76.0,
             image=self.image_image_1
+        )
+
+        self.button_image_2 = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        self.CopyButton = Button(
+            self,
+            image=self.button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+        self.CopyButton.place(
+            x=1167,
+            y=181,
+            width=184.0,
+            height=77.48383331298828
         )
 
         self.canvas.create_rectangle(

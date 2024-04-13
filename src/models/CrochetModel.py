@@ -88,11 +88,8 @@ class CrochetModel:
         self.redo_stack = []
 
     def build(self):
-        # TODO vertical chain stitches where necessary -> i dont think i will do this on turning
         # TODO restrict illegal crochet moves
-        # TODO fix turning rows so that it builds from left to right then right to left etc.
 
-        offset_xyz = [0.5, 0, 0]
         new_z = 0
         all_rows = self.rows + [self.cur_row]
         new_x = 0
@@ -192,14 +189,16 @@ class CrochetModel:
        # sc 2 from hook
 
         written_pattern = []
+        string_list = []
         row_num = 1
         all_rows = self.rows + [self.cur_row]
         first_row = all_rows[0]
         last_row = all_rows[-1]
+        prev_row = None
 
         for idx, row in enumerate(all_rows):
             if row.get_array_size() != 0:
-                row_string = f'Row {row_num}: '
+                row_string = ""
                 if row != first_row:
                     # if not first row, determine how many stitches away from
                     # current stitch to insert hook
@@ -216,7 +215,24 @@ class CrochetModel:
                         row_string += f", {next_stitch.to_string_turning()}"
                 row_num += 1
                 row_string += "\n"
-                written_pattern.append(row_string)
+                # num_string = f'Row {row_num}: '
+                string_list.append(row_string)
+        next_row = None
+        repeat_rows = []
+        for row_num, row in enumerate(string_list):
+           if row_num != len(string_list) - 1: # if its not the last one in the row
+               next_row = string_list[row_num+1]
+               if next_row == row:
+                   repeat_rows.append(row_num)
+               elif next_row != None and len(repeat_rows) != 0:
+                    num_string = f'Row {repeat_rows[0]+1}-{row_num+1}: '
+                    written_pattern.append(num_string + row)
+               else:
+                    num_string = f'Row {row_num+1}: '
+                    written_pattern.append(num_string + row)
+           else:
+               num_string = f'Row {row_num + 1}: '
+               written_pattern.append(num_string + row)
 
         print("written pattern ", written_pattern)
         written_pattern = "".join(written_pattern)

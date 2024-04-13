@@ -13,7 +13,13 @@ class PatternController:
 
     def _bind(self):
         self.frame.BackButton.config(command=self.back_command)
+        self.frame.CopyButton.config(command=self.copy_command)
 
     def back_command(self):
         self.view.switch("creation")
         print("Switching from pattern to creation")
+
+    def copy_command(self):
+        content = self.frame.canvas.itemcget(self.frame.pattern_text, "text")
+        self.view.root.clipboard_clear()
+        self.view.root.clipboard_append(content)

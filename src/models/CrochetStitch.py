@@ -276,19 +276,34 @@ class Row():
         if height > self.max_height:
             self.max_height = height
 
+    def simplify_tuples(self):
+        result = []
+        count = 0
+        last_stitch = None
+        for stitch, amount in self.tuples:
+            if type(stitch) != type(last_stitch):
+                if last_stitch is not None:
+                    result.append((last_stitch, count))
+                last_stitch = stitch
+                count = amount
+            else:
+                count += amount
+        if last_stitch is not None:
+            result.append((last_stitch, count))
+        return result
+
     def to_string(self):
-        # TODO simplify tuples
+        # TODO repeat rows
         count = 0
         row_string = ""
-        for stitch, amount in self.tuples:
-            last_tuple = self.tuples[-1]
-
+        tuple_list = self.simplify_tuples()
+        for stitch, amount in tuple_list:
+            last_tuple = tuple_list[-1]
             row_string += stitch.to_string().replace("insert_amount", str(amount))
             if (stitch, amount) != last_tuple:
                 row_string += ", "
-                next_tuple = self.tuples[count+1]
+                next_tuple = tuple_list[count+1]
                 row_string += stitch.switch_string(next_tuple[0])
-
             count += 1
         return row_string
 
