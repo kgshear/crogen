@@ -184,7 +184,7 @@ class SlipStitch(CrochetStitch):
 
     def to_string(self):
         # how many stitches to put in row
-        st_string = f"( {self.abbrev} in every stitch across) * 5"
+        st_string = f"({self.abbrev} in every stitch across) x insert_amount"
         return st_string
 
     def to_string_turning(self):
@@ -221,7 +221,7 @@ class HalfDouble(CrochetStitch):
 
 class Row():
 
-    def __init__(self, array_size=0, max_size = float('inf')):
+    def __init__(self, array_size=0):
         self.stitch_array = []
         self.array_size = array_size
         self.tuples = []
@@ -254,7 +254,6 @@ class Row():
                 self.max_height = height
 
     def add_stitch(self, stitch):
-        #print("here is modified", self.modified_stack)
         self.stitch_array.append(stitch)
         self.array_size += 1
 
@@ -293,7 +292,6 @@ class Row():
         return result
 
     def to_string(self):
-        # TODO repeat rows
         count = 0
         row_string = ""
         tuple_list = self.simplify_tuples()
@@ -306,11 +304,3 @@ class Row():
                 row_string += stitch.switch_string(next_tuple[0])
             count += 1
         return row_string
-
-
-if __name__ == "__main__":
-    row = Row()
-    row.add_stitch(SingleCrochet())
-    row.add_stitch(Chain())
-    row.add_stitch(SingleCrochet())
-    row.add_stitch(SingleCrochet())

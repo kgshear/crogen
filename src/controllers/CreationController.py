@@ -34,11 +34,19 @@ class CreationController:
             pass
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
+
+
+
+        # "Chain", "Single", "Double", "Half-Double", "Slip")
         self.frame.canvas.update_idletasks()
 
     def new_command(self):
         isRedo = False
         self.model.newRow(isRedo)
+        if self.model.get_row_count() > 1:
+            option_list = ["Single", "Double", "Half-Double", "Slip"]
+            self.frame.update_stitch_dropdown(option_list)
+
 
     def undo_command(self):
         self.model.undo()
@@ -46,22 +54,36 @@ class CreationController:
         self.frame.update_stitch_count(self.model.get_stitch_count())
         self.update_image()
         self.frame.canvas.update_idletasks()
+        if self.model.get_row_count() > 1:
+            option_list = ["Single", "Double", "Half-Double", "Slip"]
+            self.frame.update_stitch_dropdown(option_list)
+        else:
+            option_list = ["Chain"]
+            self.frame.update_stitch_dropdown(option_list)
 
 
     def redo_command(self):
         self.model.redo()
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
+        if self.model.get_row_count() > 1:
+            option_list = ["Single", "Double", "Half-Double", "Slip"]
+            self.frame.update_stitch_dropdown(option_list)
+        else:
+            option_list = ["Chain"]
+            self.frame.update_stitch_dropdown(option_list)
         self.update_image()
         self.frame.canvas.update_idletasks()
 
     def clear_command(self):
-        response = messagebox.askyesno("Copy Text", "Are you sure you want to clear the pattern? This cannot be undone")
+        response = messagebox.askyesno("Clear Pattern", "Are you sure you want to clear the pattern? This cannot be undone")
         if response:
             self.model.clearPattern()
             self.frame.update_row_count(self.model.get_row_count())
             self.frame.update_stitch_count(self.model.get_stitch_count())
             self.frame.set_empty()
+            option_list = ["Chain"]
+            self.frame.update_stitch_dropdown(option_list)
             self.frame.canvas.update_idletasks()
 
 
@@ -76,13 +98,11 @@ class CreationController:
 
     def back_command(self):
         self.view.switch("detail")
-        print("switching from creation to detail")
 
     def update_image(self):
         self.frame.update_png()
         self.frame.canvas.itemconfig(self.frame.model_object, image=self.frame.model_image)
         self.frame.canvas.update_idletasks()
-        print("called update")
 
 
 

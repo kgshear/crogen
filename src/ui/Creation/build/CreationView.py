@@ -153,16 +153,13 @@ class CreationView(Frame):
 
         self.stitch_type = StringVar(self)
         self.stitch_type.set("Chain")  # Default selection
-        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Chain", "Single", "Double", "Half-Double", "Slip")
+        self.stitch_dropdown = OptionMenu(self, self.stitch_type, "Chain")
         self.canvas.create_window(380, 205.0, window=self.stitch_dropdown)
 
         self.amount_select = StringVar(self)
         self.amount_select.set("1")  # Default selection
         self.amount_entry = Entry(self, textvariable= self.amount_select,  bg="lightgray")
         self.canvas.create_window(430, 265.0, window=self.amount_entry)
-
-
-
 
         self.canvas.create_text(
             270.0,
@@ -173,7 +170,6 @@ class CreationView(Frame):
             font=("Karla Medium", 24 * -1)
         )
 
-
         self.canvas.create_text(
             270.0,
             250.0,
@@ -182,8 +178,6 @@ class CreationView(Frame):
             fill="#000000",
             font=("Karla Medium", 24 * -1)
         )
-
-
 
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
@@ -357,13 +351,20 @@ class CreationView(Frame):
 
     def update_stitch_count(self, new_count):
         self.stitch_count = new_count
-
-        #with object ID I on a canvas C with the text from a string S, call C.itemconfigure(I, text=S).
         self.canvas.itemconfigure(self.stitch_text, text=self.stitch_count)
 
     def update_row_count(self, new_count):
         self.row_count = new_count
         self.canvas.itemconfigure(self.row_text, text=self.row_count)
+
+    def update_stitch_dropdown(self, update_list):
+        self.stitch_dropdown["menu"].delete(0, "end")
+        for item in update_list:
+            self.stitch_dropdown["menu"].add_command(
+                label=item,
+                command=lambda value=item: self.stitch_type.set(value)
+            )
+        self.stitch_type.set(update_list[0])
 
 
 

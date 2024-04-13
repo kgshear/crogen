@@ -17,7 +17,6 @@ class PatternController:
 
     def back_command(self):
         self.view.switch("creation")
-        print("Switching from pattern to creation")
 
     def copy_command(self):
         content = self.frame.canvas.itemcget(self.frame.pattern_text, "text")

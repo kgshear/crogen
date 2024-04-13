@@ -7,7 +7,6 @@ class DetailController:
         self.model = model
         self.frame = self.view.frame_classes["detail"]
         self._bind()
-        print(self.frame)
 
 
     def _bind(self):
@@ -15,4 +14,3 @@ class DetailController:
 
     def next_command(self):
         self.view.switch("creation")
-        print("switching from detail to creation")

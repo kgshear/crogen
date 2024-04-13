@@ -41,19 +41,10 @@ class DetailView(Frame):
             180.0,
             385.0,
             anchor="nw",
-            text="Design your own Pattern!",
+            text="Design your own Pattern",
             fill="#FFFFFF",
             font=("Karla Bold", 48 * -1)
         )
-    
-        # self.canvas.create_text(
-        #     238.0,
-        #     636.0,
-        #     anchor="nw",
-        #     text="Add stitches of ",
-        #     fill="#FFFDFD",
-        #     font=("Karla Bold", 40 * -1)
-        # )
     
         self.canvas.create_text(
             238.0,
@@ -67,41 +58,6 @@ class DetailView(Frame):
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
 
-
-        #
-        # self.canvas.create_rectangle(
-        #     542.0,
-        #     498.0,
-        #     903.0,
-        #     545.0,
-        #     fill="#FFFFFF",
-        #     outline="")
-        #
-        # self.canvas.create_text(
-        #     640.0,
-        #     503.0,
-        #     anchor="nw",
-        #     text="select type",
-        #     fill="#000000",
-        #     font=("Karla Regular", 32 * -1)
-        # )
-    
-        # self.canvas.create_rectangle(
-        #     542.0,
-        #     636.0,
-        #     903.0,
-        #     683.0,
-        #     fill="#FFFFFF",
-        #     outline="")
-        #
-        # self.canvas.create_text(
-        #     644.0,
-        #     642.0,
-        #     anchor="nw",
-        #     text="select size",
-        #     fill="#000000",
-        #     font=("Karla Regular", 32 * -1)
-        # )
     
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
@@ -128,6 +84,7 @@ class DetailView(Frame):
             highlightthickness=0,
             relief="flat"
         )
+
         self.NextButton.place(
             x=1070.0,
             y=679.0,
