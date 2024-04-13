@@ -9,7 +9,10 @@ class CrochetStitch:
         self.hook_dist_num = 0
         self.object_name = "NurbsCurve"
         self.import_name = "NurbsCurve"
-        self.rotation = 0
+        self.rotation_z = 0
+        self.rotation_y = 0
+        self.height = 0
+        self.width = 0.02
 
     def get_file_path(self):
         pass
@@ -37,8 +40,11 @@ class CrochetStitch:
                     highest_object = obj
         imported_object = highest_object
         bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY')
-        rotation_angle = math.radians(self.rotation)  # Convert rotation to radians
-        imported_object.rotation_euler.rotate_axis("Z", rotation_angle)
+        rotation_angle_z = math.radians(self.rotation_z)  # Convert rotation to radians
+        imported_object.rotation_euler.rotate_axis("Z", rotation_angle_z)
+
+        rotation_angle_y = math.radians(self.rotation_y)  # Convert rotation to radians
+        imported_object.rotation_euler.rotate_axis("Y", rotation_angle_y)
         return imported_object
 
     def get_object_name(self):
@@ -47,8 +53,35 @@ class CrochetStitch:
     def get_abbrev(self):
         return self.abbrev
 
+    def get_height(self):
+        return self.height
+
+    def get_width(self):
+        return self.width
+
+    def get_turning_num(self):
+        return self.turning_num
+
     def set_turned(self):
-        self.rotation = 180
+        self.rotation_z = 180
+
+    def set_vertical(self):
+        self.rotation_y = 90
+
+    def set_turn_right(self):
+        self.rotation_z = 90
+
+    def set_turn_left(self):
+        self.rotation_z = -90
+
+    def calc_num_vectical(self, other_stitch):
+        print("got here")
+        num = other_stitch.turning_num - self.turning_num
+        if num > 0:
+            return num
+        else:
+            num = 0
+        return num
 
     def to_string(self):
         # how many stitches to put in row
@@ -75,7 +108,7 @@ class CrochetStitch:
         if self.turning_num >= stitch.turning_num:
             return st_string
         else:
-            st_string = f"ch {stitch.turning_num- self.turning_num}, "
+            st_string = f"ch {self.calc_num_vectical(stitch)}, "
             return st_string
 
 
@@ -86,10 +119,13 @@ class SingleCrochet(CrochetStitch):
         self.abbrev = "sc"
         self.turning_num = 1
         self.hook_dist_num = 2
+        self.height = 0.01
+
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/single-crochet.blend"
         return file_path
+
 
 class Chain(CrochetStitch):
     def __init__(self):
@@ -98,9 +134,31 @@ class Chain(CrochetStitch):
         self.abbrev = "ch"
         self.turning_num = 0
         self.hook_dist_num = 0
+        self.height = 0.007266
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/chain-stitch.blend"
+        return file_path
+
+    def to_string_turning(self):
+        empty_str = ""
+        return empty_str
+
+    def to_string_from_stitch(self):
+        empty_str = ""
+        return empty_str
+
+class VerticalChain(CrochetStitch):
+    def __init__(self):
+        super().__init__()
+        self.object_name = "VerticalChain"
+        self.abbrev = "ch"
+        self.turning_num = 0
+        self.hook_dist_num = 0
+        self.height = 0.01
+
+    def get_file_path(self):
+        file_path = os.getcwd() + "/models/assets/vertical-chain.blend"
         return file_path
 
     def to_string_turning(self):
@@ -118,7 +176,7 @@ class SlipStitch(CrochetStitch):
         self.abbrev = "sl st"
         self.turning_num = 0
         self.hook_dist_num = 2
-
+        self.height = 0.006553
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/slip-stitch.blend"
@@ -141,6 +199,7 @@ class DoubleCrochet(CrochetStitch):
         self.abbrev = "dc"
         self.turning_num = 3
         self.hook_dist_num = 4
+        self.height = 0.03
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/double-crochet.blend"
@@ -154,6 +213,7 @@ class HalfDouble(CrochetStitch):
         self.abbrev = "hdc"
         self.turning_num = 2
         self.hook_dist_num = 3
+        self.height = 0.02
 
     def get_file_path(self):
         file_path = os.getcwd() + "/models/assets/half-double-crochet.blend"
@@ -166,10 +226,6 @@ class Row():
         self.array_size = array_size
         self.tuples = []
         self.max_height = 0
-        self.height_dict = {"DoubleCrochet": 0.03, "HalfDouble": 0.02, "ChainStitch": 0.007266,
-                            "SingleCrochet":0.01, "SlipStitch": 0.006553}
-        self.width_dict = {"DoubleCrochet": 0.02, "HalfDouble": 0.02, "ChainStitch": 0.02,
-                            "SingleCrochet": 0.02, "SlipStitch": 0.02}
         self.modified_stack = []
         self.row_turned = False
 
@@ -184,11 +240,18 @@ class Row():
 
     def get_tuples(self):
         return self.tuples
+
     def get_row_turned(self):
         return self.row_turned
 
     def set_row_turned(self, turned):
         self.row_turned = turned
+
+    def update_height(self):
+        for stitch, amount in self.get_tuples():
+            height = stitch.get_height()
+            if height > self.max_height:
+                self.max_height = height
 
     def add_stitch(self, stitch):
         #print("here is modified", self.modified_stack)
@@ -202,11 +265,14 @@ class Row():
             self.stitch_array.pop(idx) #removes modified items from stitch array
         self.array_size = len(self.stitch_array)
         self.tuples.pop()
+        self.max_height = 0
+        self.update_height()
+
 
     def add_to_tuples(self, stitch, amount, modified_indexes):
         self.modified_stack.append(modified_indexes)
         self.tuples.append((stitch, amount))
-        height = self.height_dict[stitch.object_name]
+        height = stitch.get_height()
         if height > self.max_height:
             self.max_height = height
 
