@@ -17,6 +17,7 @@ class CrochetModel:
         self.history = []
         self.redo_stack = []
         self.build_count = 0
+        self.max_length = float('inf')
 
     def init_scene(self):
         bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -58,6 +59,11 @@ class CrochetModel:
             if self.cur_row.get_row_turned() == False:
                 next_row_turned = True
             self.rows.append(self.cur_row)
+            # if len(self.rows) == 1:
+            #     self.max_length = self.rows[0].get_array_size()
+            # if self.rows[-1].get_array_size() < self.max_length:
+            #
+            self.max_length = self.rows[-1].get_array_size()
             self.cur_row = Row()
             self.cur_row.set_row_turned(next_row_turned)
             self.row_amount += 1
@@ -77,6 +83,7 @@ class CrochetModel:
         self.init_scene()
         self.history = []
         self.redo_stack = []
+        self.max_length = float("inf")
 
     def build(self):
         # TODO restrict illegal crochet moves
@@ -150,7 +157,12 @@ class CrochetModel:
         if (new_z == 0):
             new_z = .001
         camera = self.get_camera_object()
-        camera.location = (max_length/2, max_length * 2 + new_z, new_z/2 )
+        cam_dist = 0
+        if max_length > new_z:
+            cam_dist = max_length * 2 + new_z
+        else:
+            cam_dist = new_z * 2 + max_length
+        camera.location = (max_length/2, cam_dist + new_z, new_z/2 )
         bpy.ops.ed.undo_push(message=str(self.build_count))
         self.save_png()
         self.build_count += 1
@@ -202,6 +214,7 @@ class CrochetModel:
                elif next_row != None and len(repeat_rows) != 0:
                     num_string = f'Row {repeat_rows[0]+1}-{row_num+1}: '
                     written_pattern.append(num_string + row)
+                    repeat_rows = []
                else:
                     num_string = f'Row {row_num+1}: '
                     written_pattern.append(num_string + row)
@@ -254,3 +267,6 @@ class CrochetModel:
         # if self.cur_row.get_array_size() > 0:
         #     count += 1
         return count
+
+    def get_max_length(self):
+        return self.max_length

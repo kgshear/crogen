@@ -23,21 +23,26 @@ class CreationController:
         isRedo = False
         amount = self.frame.amount_select.get()
         stitch_type = self.frame.stitch_type.get()
+        max_length = self.model.get_max_length()
         if amount.isnumeric():
             amount = int(amount)
             if amount > 100:
                 pass
             else:
-                self.model.addToRow(stitch_type, amount, isRedo)
-                self.update_image()
+                new_length = amount + self.model.cur_row.get_array_size()
+                if new_length > max_length and stitch_type != "Chain":
+                    amount = max_length - self.model.cur_row.get_array_size()
+                if amount > 0:
+                    self.model.addToRow(stitch_type, amount, isRedo)
+                    self.update_image()
         else:
             pass
+
+        # if self.model.get_max_length() == self.model.cur_row.get_array_size():
+        #     option_list = ["Chain"]
+        #     self.frame.update_stitch_dropdown(option_list)
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
-
-
-
-        # "Chain", "Single", "Double", "Half-Double", "Slip")
         self.frame.canvas.update_idletasks()
 
     def new_command(self):

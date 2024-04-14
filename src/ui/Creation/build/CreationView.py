@@ -2,7 +2,7 @@
 from pathlib import Path
 
 
-from tkinter import Tk, Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu, Entry, Label
+from tkinter import Canvas, Button, PhotoImage, Frame, StringVar, OptionMenu, Entry
 import numpy as np
 from PIL import Image
 
@@ -365,8 +365,3 @@ class CreationView(Frame):
                 command=lambda value=item: self.stitch_type.set(value)
             )
         self.stitch_type.set(update_list[0])
-
-
-
-
-
