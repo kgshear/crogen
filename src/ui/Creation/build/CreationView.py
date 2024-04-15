@@ -130,10 +130,9 @@ class CreationView(Frame):
             759.0,
             fill="#FFFFFF",
             outline="")
-        # label = Label(label_frame, text=”  # Text which you want to show in label”)
-        # self.row_label = Label(930, 660.0, text=self.stitch_count, font=("Karla Regular", 36 * -1))
-        self.row_text = self.canvas.create_text(930, 660.0, text=self.row_count, fill="black", font=("Karla Regular", 36 * -1))
-        self.stitch_text = self.canvas.create_text(930, 737.0, text=self.stitch_count, fill="black", font=("Karla Regular", 36 * -1))
+
+        self.row_text = self.canvas.create_text(950, 660.0, text=self.row_count, fill="black", font=("Karla Regular", 36 * -1))
+        self.stitch_text = self.canvas.create_text(950, 737.0, text=self.stitch_count, fill="black", font=("Karla Regular", 36 * -1))
 
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))

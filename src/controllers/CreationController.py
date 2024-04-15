@@ -1,6 +1,5 @@
 from src.models.CrochetModel import CrochetModel
 from src.ui.View import View
-import os
 from tkinter import messagebox
 
 class CreationController:
