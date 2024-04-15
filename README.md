@@ -54,5 +54,5 @@ This project is run via the main.py file. Navigate to your project directory via
 ./main.py
 ```
 ##  :camera: Gallery
-![image](https://github.com/kgshear/crogen/assets/124616334/bd853e6e-5475-4587-9ea6-159c816152d7)
+![image](https://github.com/kgshear/crogen/assets/124616334/eebfe87c-2d25-4417-b282-e081696de2a1)
 ![image](https://github.com/kgshear/crogen/assets/124616334/639db478-599f-4cce-88df-5c8a077ed9ec)
