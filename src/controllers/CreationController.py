@@ -37,9 +37,6 @@ class CreationController:
         else:
             pass
 
-        # if self.model.get_max_length() == self.model.cur_row.get_array_size():
-        #     option_list = ["Chain"]
-        #     self.frame.update_stitch_dropdown(option_list)
         self.frame.update_row_count(self.model.get_row_count())
         self.frame.update_stitch_count(self.model.get_stitch_count())
         self.frame.canvas.update_idletasks()
@@ -83,7 +80,7 @@ class CreationController:
         response = messagebox.askyesno("Clear Pattern", "Are you sure you want to clear the pattern? This cannot be undone")
         if response:
             self.model.clearPattern()
-            self.frame.update_row_count(self.model.get_row_count())
+            self.frame.update_row_count(0)
             self.frame.update_stitch_count(self.model.get_stitch_count())
             self.frame.set_empty()
             option_list = ["Chain"]
