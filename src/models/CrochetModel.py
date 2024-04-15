@@ -59,10 +59,6 @@ class CrochetModel:
             if self.cur_row.get_row_turned() == False:
                 next_row_turned = True
             self.rows.append(self.cur_row)
-            # if len(self.rows) == 1:
-            #     self.max_length = self.rows[0].get_array_size()
-            # if self.rows[-1].get_array_size() < self.max_length:
-            #
             self.max_length = self.rows[-1].get_array_size()
             self.cur_row = Row()
             self.cur_row.set_row_turned(next_row_turned)
@@ -125,13 +121,8 @@ class CrochetModel:
                                 if num_vert > 0:
                                     vert_x = 0
                                     vertical_chain = VerticalChain()
-
                                     if turned:
-                                        #vertical_chain.set_turn_left()
                                         vert_x = last_row.get_array_size() * .01 + .01
-                                    else:
-                                        #vertical_chain.set_turn_right()
-                                        pass
                                     vert_model = vertical_chain.get_model()
 
                                     vert_model.location = (vert_x, 0, pos_z)
@@ -148,7 +139,6 @@ class CrochetModel:
                     else:
                         new_x -= .01 * count
             else:
-                last_last_row = last_row
                 last_row = row
             new_z += row.get_max_height() * .9
         if (new_z == 0):
@@ -257,8 +247,6 @@ class CrochetModel:
 
     def get_row_count(self):
         count = len(self.rows) + 1
-        # if self.cur_row.get_array_size() > 0:
-        #     count += 1
         return count
 
     def get_max_length(self):

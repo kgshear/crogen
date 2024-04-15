@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+from tkinter import Canvas, Button, PhotoImage, Frame
 
 
 OUTPUT_PATH = Path(__file__).parent

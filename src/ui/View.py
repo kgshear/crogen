@@ -20,7 +20,3 @@ class View:
 
     def start_mainloop(self):
         self.root.mainloop()
-
-if __name__ == '__main__':
-    view = View()
-    view.start_mainloop()

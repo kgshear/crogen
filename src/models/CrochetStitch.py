@@ -95,10 +95,6 @@ class CrochetStitch:
         st_string = f"yo, insert hook {self.hook_dist_num} stitches away from hook. "
         return st_string
 
-    # def to_string_switch_stitch(self):
-    #     st_string = f"ch {self.turning_num}"
-    #     return st_string
-
     def switch_string(self, stitch):
         #  how much to ch when going from one stitch type to another
         st_string = ""

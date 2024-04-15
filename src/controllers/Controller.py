@@ -16,5 +16,4 @@ class Controller:
 
     def start(self):
         self.view.start_mainloop()
-        # self.view.switch("detail")
 

@@ -1,5 +1,3 @@
-# contains the whole tkinter application
-
 from tkinter import Tk
 class Crogen(Tk):
     def __init__(self):
@@ -8,11 +6,3 @@ class Crogen(Tk):
         start_width = 1395
         start_height = 800
         self.geometry(f"{start_width}x{start_height}")
-
-
-
-
-
-# if __name__ == '__main__':
-#     app = Crogen()
-#     app.mainloop()
