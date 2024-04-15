@@ -24,8 +24,6 @@ class CrochetStitch:
 
         for obj in data_to.objects:
             bpy.context.collection.objects.link(obj)
-
-        print("import_name", self.import_name)
         highest_object = None
         highest_num = 0
         for obj in bpy.context.scene.objects:
@@ -75,7 +73,6 @@ class CrochetStitch:
         self.rotation_z = -90
 
     def calc_num_vectical(self, other_stitch):
-        print("got here")
         num = other_stitch.turning_num - self.turning_num
         if num > 0:
             return num
@@ -259,7 +256,6 @@ class Row():
 
     def undo(self):
         last_modified = self.modified_stack.pop()
-        print(last_modified, len(self.stitch_array))
         for idx in reversed(last_modified):
             self.stitch_array.pop(idx) #removes modified items from stitch array
         self.array_size = len(self.stitch_array)

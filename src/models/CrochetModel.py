@@ -86,10 +86,6 @@ class CrochetModel:
         self.max_length = float("inf")
 
     def build(self):
-        # TODO restrict illegal crochet moves
-        # what is illegal?
-            # first row must be chain stitch
-            # you can only add as many stitches as there are under.
         new_z = 0
         all_rows = self.rows + [self.cur_row]
         new_x = 0
@@ -111,7 +107,6 @@ class CrochetModel:
                     if (tpl_idx == len(stitch_tuples)-1): #if it is the modified stitch
                         if turned:
                             stitch.set_turned()
-
                         model = stitch.get_model()
                         if (model != None):
                             model.location = (new_x, 0, new_z)
@@ -132,10 +127,11 @@ class CrochetModel:
                                     vertical_chain = VerticalChain()
 
                                     if turned:
-                                        vertical_chain.set_turn_left()
+                                        #vertical_chain.set_turn_left()
                                         vert_x = last_row.get_array_size() * .01 + .01
                                     else:
-                                        vertical_chain.set_turn_right()
+                                        #vertical_chain.set_turn_right()
+                                        pass
                                     vert_model = vertical_chain.get_model()
 
                                     vert_model.location = (vert_x, 0, pos_z)
@@ -152,7 +148,8 @@ class CrochetModel:
                     else:
                         new_x -= .01 * count
             else:
-                last_row =  row
+                last_last_row = last_row
+                last_row = row
             new_z += row.get_max_height() * .9
         if (new_z == 0):
             new_z = .001
@@ -221,8 +218,6 @@ class CrochetModel:
            else:
                num_string = f'Row {row_num + 1}: '
                written_pattern.append(num_string + row)
-
-        print("written pattern ", written_pattern)
         written_pattern = "".join(written_pattern)
         return written_pattern
 
@@ -246,9 +241,7 @@ class CrochetModel:
         if self.history:
             action = self.history.pop()
             if action["type"] == "add_to_row":
-                print("undoing")
                 bpy.ops.ed.undo()
-                print("undone")
                 self.cur_row.undo()
                 self.save_png()
             elif action["type"] == "new_row":

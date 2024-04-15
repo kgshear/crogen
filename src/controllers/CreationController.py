@@ -99,8 +99,6 @@ class CreationController:
         next_frame.update_pattern(written_pattern)
         next_frame.canvas.update_idletasks()
 
-        print("switching from creation to pattern")
-
     def back_command(self):
         self.view.switch("detail")
 
