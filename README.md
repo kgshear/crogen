@@ -1,30 +1,58 @@
-# crogen
+![image](https://github.com/kgshear/crogen/assets/124616334/71a57323-a218-4d13-8ae3-d3a95b029e08)
+
+This project was created with Python and uses Tkinter and Blender libraries. 
+
+##  :beginner: About
+This is a crochet software that allows users to create a crochet pattern with a UI, adding rows and different types of stitches via various buttons. As the user creates this pattern, a 3D model will update to demonstrate what the pattern would look like when actually crocheted. When the user is done making the pattern, they can generate a written version of the pattern. This written pattern, when followed, will create a crochet piece that matches the 3D pattern. 
+
+## :zap: Usage
+This project can be used to streamline the process of creating crochet patterns.
+
+You can add any number of stitches by using the "Add" button. You can configure the type and amount. This adds to your current row.
+
+![image](https://github.com/kgshear/crogen/assets/124616334/fac5349e-34e1-42ed-9169-a4df330ab29f)
+___
+ You can create a new row by selecting the "New Row" button. Once you create a new row, any stitches that you add will be appended to this.
+ 
+![image](https://github.com/kgshear/crogen/assets/124616334/30d1cd56-02b4-419d-a985-a549a439df85)
+___
+You can undo or redo any changes you make
+
+ ![image](https://github.com/kgshear/crogen/assets/124616334/dd2424a5-b3e6-4b3d-97f5-5d339ff68214)
+___
+You can clear the pattern to start over from scratch.
+
+![image](https://github.com/kgshear/crogen/assets/124616334/080a3285-f19f-4f57-9520-1b230bd5dea1)
+___
+Select "Create" to generate a written pattern.
+
+![image](https://github.com/kgshear/crogen/assets/124616334/45c35e8c-9fd5-444b-9774-af5f6a970084)
 
 
-SRC contains all the relevant code for the project
+##  :electric_plug: Installation
+Start by cloning the project. Clone project as http or ssh and copy the url or key. Go to terminal and execute the following commands
 
-CrochetModel.py contains all of the functions for making changes to the 3D model. This file is incomplete.
-CrochetStitch.py contains all of the different stitch types 
-Crogen.py will be used to run the application
+Navigate to the directory you would like the project to be in
+```
+cd your_directory_name
+```
+```
+git clone link_or_key_here
+```
+### :notebook: Pre-Requisites
+1. Blender
+2. Tkinter
 
-In the folder ui:
-contains Creation, Build, and Detail. Also contains View.py which holds the different views
+To install these libraries, navigate to to the project directory and run the following command in terminal. This should download all of the dependencies for the project. 
 
-Creation contains all of the files related to the creation window
-> build contains assets and CreationView
-> assets are pictures used in the CreationView and CreationView contains the Tkinter Code for the Creation Window gui
-
-Detail contains all of the files related to the creation window
-> build contains assets and DetailView
-> assets are pictures used in the DetailView and DetailView contains the Tkinter Code for the Detail Window gui
-
-Pattern contains all of the files related to the pattern window
-> build contains assets and PatternView
-> assets are pictures used in the PatternView and PatternView contains the Tkinter Code for the Pattern Window gui
-
-
-In the folder Controller:
-contains controllers for the various view files, manages views
-
-In the folder Model:
-contains 3D models and contains the CrochetModel and CrochetStitch classes which hold the data of the 3D model the user is creating
+```
+pip install -r requirements.txt
+```
+###  :package: Starting the Project
+This project is run via the main.py file. Navigate to your project directory via terminal. Run the following command. This opens the UI.  
+```cd your_directory_name/crogen/src
+./main.py
+```
+##  :camera: Gallery
+![image](https://github.com/kgshear/crogen/assets/124616334/bd853e6e-5475-4587-9ea6-159c816152d7)
+![image](https://github.com/kgshear/crogen/assets/124616334/639db478-599f-4cce-88df-5c8a077ed9ec)
